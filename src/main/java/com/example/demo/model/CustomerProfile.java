@@ -43,7 +43,6 @@ public class CustomerProfile {
 
     private LocalDateTime createdAt;
 
-    // Default values before saving
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();

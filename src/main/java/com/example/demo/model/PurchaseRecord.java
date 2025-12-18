@@ -27,7 +27,6 @@ public class PurchaseRecord {
 
     private String storeLocation;
 
-    // Business rule validation
     public void setAmount(Double amount) {
         if (amount == null || amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
