@@ -19,8 +19,11 @@ public class VisitRecord{
 
     private String channel;
 
-    public void sethannel(){
-
+    public void setChannel(String channel){
+            if(channel != STORE && channel != APP && channel != WEB){
+                throw new IllegalArgumentException("Invalid Channel");
+            }
+        this.channel=channel;  
     }
 
 
