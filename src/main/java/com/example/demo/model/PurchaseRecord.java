@@ -19,7 +19,7 @@ public class PurchaseRecord {
     private LocalDate purchaseDate;
     private String storeLocation;
 
-    public void setAmount(Double amount) {
+    public void setAmount(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }

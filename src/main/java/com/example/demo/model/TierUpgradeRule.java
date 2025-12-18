@@ -22,6 +22,18 @@ public class TierUpgradeRule{
     private double minSpend;
     private int minVisits;
     private Boolean active;
-    
+
+    public void setFromTier(String fromTier) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+        this.fromTier = fromTier;
+    }
+    public void setToTier(String toTier)) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+        this.toTier = totier;
+    }
 
 }
