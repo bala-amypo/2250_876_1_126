@@ -5,14 +5,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-// @Table(
-//     name = "customer_profile",
-//     uniqueConstraints = {
-//         @UniqueConstraint(columnNames = "customerId"),
-//         @UniqueConstraint(columnNames = "email"),
-//         @UniqueConstraint(columnNames = "phone")
-//     }
-// )
 @Getter
 @Setter
 @NoArgsConstructor
