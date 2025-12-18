@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class VisitRecord{
     @Id
+    @GeneratedValues(strategy =G)
     private long id;
-    
+
 }
