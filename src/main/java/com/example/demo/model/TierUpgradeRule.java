@@ -13,6 +13,15 @@ public class TierUpgradeRule{
     @GeneratedValues (strategy=GenerationType.IDENTITY);
     private Long id;
 
-    @Column(unique=True)
+    @Column(unique=true)
     private String fromTier;
+
+    @Column(unique=true)
+    private String totier;
+
+    private double minSpend;
+    private int minVisits;
+    private Boolean active;
+    
+
 }

@@ -15,7 +15,7 @@ public class PurchaseRecord {
     private Long id;
 
     private Long customerId;
-    private Double amount;
+    private double amount;
     private LocalDate purchaseDate;
     private String storeLocation;
 
