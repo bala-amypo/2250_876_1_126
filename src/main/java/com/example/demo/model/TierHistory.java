@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TierHistory{
     @Id
-    // @GeneratedValues(strategy = GenerationType.IDENTITY);
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long customerId;
@@ -18,6 +18,5 @@ public class TierHistory{
     private String newTier;
     private String reason;
     private LocalDateTime changedAt;
-
-    @PrePersist
+    // @PrePersist
 }
