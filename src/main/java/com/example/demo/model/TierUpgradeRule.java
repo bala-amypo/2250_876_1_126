@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TierUpgradeRule{
     @Id
-    @GeneratedValues (strategy=GenerationType.IDENTITY);
+    // @GeneratedValues (strategy=GenerationType.IDENTITY);
     private Long id;
 
     @Column(unique=true)
@@ -29,7 +29,7 @@ public class TierUpgradeRule{
         }
         this.fromTier = fromTier;
     }
-    public void setToTier(String toTier)) {
+    public void setToTier(String toTier) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }

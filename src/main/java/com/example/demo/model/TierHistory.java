@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TierHistory{
     @Id
-    @GeneratedValues (strategy = GenerationType.IDENTITY);
+    // @GeneratedValues(strategy = GenerationType.IDENTITY);
     private Long id;
 
     private Long customerId;
