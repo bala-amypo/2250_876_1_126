@@ -10,7 +10,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class VisitRecord{
     @Id
-    @GeneratedValues(strategy =G)
-    private long id;
+    @GeneratedValues(strategy =GenerationType.IDENTITY)
+    private Long id;
+
+    private Long customerId;
+
+    private LocalDate visitDate;
+
+    private String channel;
+
+    public void sethannel(){
+
+    }
+
 
 }
