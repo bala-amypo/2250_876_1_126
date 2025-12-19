@@ -20,12 +20,18 @@ public class CustomerProfile {
     @Column(unique = true)
     private String phone;
 
-    private String currentTier = "BRONZE";
+    private String currentTier;
     private Boolean active;
     private LocalDateTime createdAt;
 
     @PrePersist
-    public void setDefaults() {
+    public void prePersist() {
+        if(currentTier == NULL ) {
+             currentTier = "BRONZE";
+        }
+        if(active == NULL){
+            active = true;
+        }
         createdAt = LocalDateTime.now();
     }
 
