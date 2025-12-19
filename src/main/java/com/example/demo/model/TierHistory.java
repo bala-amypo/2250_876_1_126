@@ -1,22 +1,22 @@
-package com.example.demo.model;
-import jakarta.persistence.*;
-import lombok.*;
-import java.time.LocalDateTime;
+// package com.example.demo.model;
+// import jakarta.persistence.*;
+// import lombok.*;
+// import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class TierHistory{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+// @Entity
+// @Getter
+// @Setter
+// @NoArgsConstructor
+// @AllArgsConstructor
+// public class TierHistory{
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
 
-    private Long customerId;
-    private String oldTier;
-    private String newTier;
-    private String reason;
-    private LocalDateTime changedAt;
-    // @PrePersist
-}
+//     private Long customerId;
+//     private String oldTier;
+//     private String newTier;
+//     private String reason;
+//     private LocalDateTime changedAt;
+//     // @PrePersist
+// }
