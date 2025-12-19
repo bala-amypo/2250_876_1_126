@@ -5,10 +5,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name=customer_profiles)
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class CustomerProfile {
 
     @Id
@@ -32,8 +28,9 @@ public class CustomerProfile {
 
     @PrePersist
     public void setDefaults() {
-        currentTier = "BRONZE";
-        active = true;
+        if(currentTier==NULL){
+            currentTier = BRONZE;
+        }
         createdAt = LocalDateTime.now();
     }
 }
