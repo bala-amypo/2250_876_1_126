@@ -1,6 +1,6 @@
 package com.example.demo.model;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "visit_records")
