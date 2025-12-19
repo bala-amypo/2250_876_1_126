@@ -1,28 +1,25 @@
-// package com.example.demo.model;
-// import jakarta.persistence.*;
-// import lombok.*;
-// import java.time.LocalDate;
+package com.example.demo.model;
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDate;
 
-// @Entity
-// @Getter
-// @Setter
-// @NoArgsConstructor
-// @AllArgsConstructor
-// public class PurchaseRecord {
+@Entity
+@Column(name="purchase_records")
+public class PurchaseRecord {
 
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-//     private Long customerId;
-//     private double amount;
-//     private LocalDate purchaseDate;
-//     private String storeLocation;
+    private Long customerId;
+    private double amount;
+    private LocalDate purchaseDate;
+    private String storeLocation;
 
-//     public void setAmount(double amount) {
-//         if (amount <= 0) {
-//             throw new IllegalArgumentException("Amount must be greater than 0");
-//         }
-//         this.amount = amount;
-//     }
-// }
+    public void setAmount(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+        this.amount = amount;
+    }
+}
