@@ -4,7 +4,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Column(name="purchase_records")
+@Table(name= "purchase_records")
 public class PurchaseRecord {
 
     @Id
