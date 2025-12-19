@@ -74,10 +74,10 @@ public class TierHistory{
         this.changedAt = changedAt;
     }
 
-    public TierHistoryRecord() {
+    public TierHistory() {
     }
 
-    public TierHistoryRecord(Long customerId, String oldTier, String newTier, String reason, LocalDateTime changedAt) {
+    public TierHistory(Long customerId, String oldTier, String newTier, String reason, LocalDateTime changedAt) {
         this.customerId = customerId;
         this.oldTier = oldTier;
         this.newTier = newTier;
