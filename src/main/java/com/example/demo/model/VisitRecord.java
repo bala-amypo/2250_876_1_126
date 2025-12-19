@@ -49,8 +49,6 @@ public class VisitRecord{
 
     }
 
-    public TierUpgradeRule() {
-    }
 
     public TierUpgradeRule(Long id, Long customerId, LocalDate visitDate, String channel) {
         this.id = id;
@@ -59,7 +57,6 @@ public class VisitRecord{
         this.channel = channel;
     }
     
-
-
-
+    public TierUpgradeRule() {
+    }
 }
