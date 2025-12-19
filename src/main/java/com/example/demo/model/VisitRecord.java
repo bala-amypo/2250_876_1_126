@@ -50,13 +50,13 @@ public class VisitRecord{
     }
 
 
-    public TierUpgradeRule(Long id, Long customerId, LocalDate visitDate, String channel) {
+    public VisitRecord(Long id, Long customerId, LocalDate visitDate, String channel) {
         this.id = id;
         this.customerId = customerId;
         this.visitDate = visitDate;
         this.channel = channel;
     }
     
-    public TierUpgradeRule() {
+    public VisitRecord() {
     }
 }
