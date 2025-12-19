@@ -18,6 +18,14 @@ public class TierUpgradeRule{
     private double minSpend;
     private int minVisits;
     private Boolean active;
+
+    @PrePersist
+    public void prePersist() {
+        if (active == null) {
+            active = true;
+        }
+    }
+
     public Long getId() {
         return id;
     }
