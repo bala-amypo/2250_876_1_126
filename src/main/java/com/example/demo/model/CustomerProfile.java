@@ -26,10 +26,10 @@ public class CustomerProfile {
 
     @PrePersist
     public void prePersist() {
-        if(currentTier == NULL ) {
+        if(currentTier == null ) {
              currentTier = "BRONZE";
         }
-        if(active == NULL){
+        if(active == null){
             active = true;
         }
         createdAt = LocalDateTime.now();

@@ -1,10 +1,12 @@
 package com.example.demo.model;
+
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDate;  
 
 @Entity
 @Table(name = "visit_records")
-public class VisitRecord{
+public class VisitRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,6 +16,7 @@ public class VisitRecord{
     private LocalDate visitDate;
 
     private String channel;
+
 
     public Long getId() {
         return id;
@@ -45,17 +48,15 @@ public class VisitRecord{
 
     public void setChannel(String channel) {
         this.channel = channel;
-
     }
 
+    public VisitRecord() {
+    }
 
     public VisitRecord(Long id, Long customerId, LocalDate visitDate, String channel) {
         this.id = id;
         this.customerId = customerId;
         this.visitDate = visitDate;
         this.channel = channel;
-    }
-    
-    public VisitRecord() {
     }
 }
