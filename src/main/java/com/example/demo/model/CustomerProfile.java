@@ -4,6 +4,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name=customer_profiles)
 @Getter
 @Setter
 @NoArgsConstructor
