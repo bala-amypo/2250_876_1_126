@@ -1,6 +1,5 @@
 package com.example.demo.model;
 import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalDate;
 
 @Entity
@@ -54,9 +53,6 @@ public class PurchaseRecord {
     }
 
     public PurchaseRecord(Long id, Long customerId, double amount, LocalDate purchaseDate, String storeLocation) {
-         if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be positive");
-        }
         this.id = id;
         this.customerId = customerId;
         this.amount = amount;
