@@ -16,12 +16,50 @@ public class VisitRecord{
 
     private String channel;
 
-    public void setChannel(String channel){
-            if(channel != STORE && channel != APP && channel != WEB){
-                throw new IllegalArgumentException("Invalid Channel");
-            }
-        this.channel=channel;  
+    public Long getId() {
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public LocalDate getVisitDate() {
+        return visitDate;
+    }
+
+    public void setVisitDate(LocalDate visitDate) {
+        this.visitDate = visitDate;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+
+    }
+
+    public TierUpgradeRule() {
+    }
+
+    public TierUpgradeRule(Long id, Long customerId, LocalDate visitDate, String channel) {
+        this.id = id;
+        this.customerId = customerId;
+        this.visitDate = visitDate;
+        this.channel = channel;
+    }
+    
+
 
 
 }
