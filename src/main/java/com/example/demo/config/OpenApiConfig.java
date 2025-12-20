@@ -1,24 +1,26 @@
 package com.example.demo.config;
 
-import io.swagger.v3.oas.models.*;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.*;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
-
+    
     @Bean
-    public OpenAPI openAPI() {
-
+    public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("Customer Loyalty Tier Upgrader API")
-                        .description("API for managing customers, purchases, visits and tier upgrades")
-                        .version("1.0"))
-                .addSecurityItem(new SecurityRequirement()
-                        .addList("bearerAuth"))
+                        .version("1.0")
+                        .description("A JWT-secured Spring Boot API for managing customer loyalty tiers, " +
+                                   "tracking purchases and visits, and automatically upgrading customers " +
+                                   "based on configurable rules."))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
