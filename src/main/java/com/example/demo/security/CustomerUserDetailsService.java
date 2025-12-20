@@ -1,39 +1,34 @@
-// package com.example.demo.security;
+package com.example.demo.security;
 
-// import com.example.demo.entity.CustomerProfile;
-// import com.example.demo.repository.CustomerProfileRepository;
-// import org.springframework.security.core.authority.SimpleGrantedAuthority;
-// import org.springframework.security.core.userdetails.User;
-// import org.springframework.security.core.userdetails.UserDetails;
-// import org.springframework.security.core.userdetails.UserDetailsService;
-// import org.springframework.security.core.userdetails.UsernameNotFoundException;
-// import org.springframework.stereotype.Service;
+import com.example.demo.entity.CustomerProfile;
+import com.example.demo.repository.CustomerProfileRepository;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.Service;
 
-// import java.util.Collections;
+import java.util.List;
 
-// @Service
-// public class CustomerUserDetailsService implements UserDetailsService {
-    
-//     private final CustomerProfileRepository customerProfileRepository;
-    
-//     public CustomerUserDetailsService(CustomerProfileRepository customerProfileRepository) {
-//         this.customerProfileRepository = customerProfileRepository;
-//     }
-    
-//     @Override
-//     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//         CustomerProfile customer = customerProfileRepository.findByEmail(email)
-//                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        
-//         String role = customer.getRole() != null ? customer.getRole() : "ROLE_USER";
-//         if (!role.startsWith("ROLE_")) {
-//             role = "ROLE_" + role;
-//         }
-        
-//         return User.builder()
-//                 .username(customer.getEmail())
-//                 .password(customer.getPassword())
-//                 .authorities(Collections.singletonList(new SimpleGrantedAuthority(role)))
-//                 .build();
-//     }
-// }
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
+
+    private final CustomerProfileRepository repository;
+
+    public CustomUserDetailsService(CustomerProfileRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email)
+            throws UsernameNotFoundException {
+
+        CustomerProfile customer = repository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found"));
+
+        return new User(
+                customer.getEmail(),
+                "encrypted-password",
+                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+    }
+}
