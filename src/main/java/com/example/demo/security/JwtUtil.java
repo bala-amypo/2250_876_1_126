@@ -2,6 +2,7 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
+import io.jsonwebtoken.security.Keys;
 
 import java.util.Date;
 
