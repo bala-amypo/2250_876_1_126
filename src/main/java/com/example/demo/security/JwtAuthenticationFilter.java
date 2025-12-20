@@ -1,46 +1,46 @@
-package com.example.demo.config;
+// package com.example.demo.config;
 
-import com.example.demo.security.JwtUtil;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+// import com.example.demo.security.JwtUtil;
+// import jakarta.servlet.*;
+// import jakarta.servlet.http.*;
+// import org.springframework.security.authentication.*;
+// import org.springframework.security.core.context.SecurityContextHolder;
+// import org.springframework.stereotype.Component;
+// import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.List;
+// import java.io.IOException;
+// import java.util.List;
 
-@Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+// @Component
+// public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
+//     private final JwtUtil jwtUtil;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
+//     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+//         this.jwtUtil = jwtUtil;
+//     }
 
-    @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain)
-            throws ServletException, IOException {
+//     @Override
+//     protected void doFilterInternal(
+//             HttpServletRequest request,
+//             HttpServletResponse response,
+//             FilterChain filterChain)
+//             throws ServletException, IOException {
 
-        String header = request.getHeader("Authorization");
+//         String header = request.getHeader("Authorization");
 
-        if (header != null && header.startsWith("Bearer ")) {
+//         if (header != null && header.startsWith("Bearer ")) {
 
-            String token = header.substring(7);
-            String email = jwtUtil.extractEmail(token);
+//             String token = header.substring(7);
+//             String email = jwtUtil.extractEmail(token);
 
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(
-                            email, null, List.of());
+//             UsernamePasswordAuthenticationToken auth =
+//                     new UsernamePasswordAuthenticationToken(
+//                             email, null, List.of());
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
-        }
+//             SecurityContextHolder.getContext().setAuthentication(auth);
+//         }
 
-        filterChain.doFilter(request, response);
-    }
-}
+//         filterChain.doFilter(request, response);
+//     }
+// }
