@@ -10,31 +10,33 @@ import java.util.NoSuchElementException;
 
 @Service
 public class PurchaseRecordServiceImpl implements PurchaseRecordService {
-    
+
     private final PurchaseRecordRepository purchaseRecordRepository;
-    
+
     public PurchaseRecordServiceImpl(PurchaseRecordRepository purchaseRecordRepository) {
         this.purchaseRecordRepository = purchaseRecordRepository;
     }
-    
+
     @Override
     public PurchaseRecord recordPurchase(PurchaseRecord purchase) {
-        if (purchase.getAmount() == null || purchase.getAmount() <= 0) {
+
+        if (purchase.getAmount() <= 0) {
             throw new IllegalArgumentException("Amount must be positive");
         }
+
         return purchaseRecordRepository.save(purchase);
     }
-    
+
     @Override
     public List<PurchaseRecord> getPurchasesByCustomer(Long customerId) {
         return purchaseRecordRepository.findByCustomerId(customerId);
     }
-    
+
     @Override
     public List<PurchaseRecord> getAllPurchases() {
         return purchaseRecordRepository.findAll();
     }
-    
+
     @Override
     public PurchaseRecord getPurchaseById(Long id) {
         return purchaseRecordRepository.findById(id)
