@@ -29,7 +29,8 @@ public class TierHistoryRecord {
     public TierHistoryRecord() {
     }
     
-    public TierHistoryRecord(Long customerId, String oldTier, String newTier, String reason, LocalDateTime changedAt) {
+    public TierHistoryRecord(Long customerId, String oldTier, String newTier, 
+                            String reason, LocalDateTime changedAt) {
         this.customerId = customerId;
         this.oldTier = oldTier;
         this.newTier = newTier;

@@ -39,7 +39,9 @@ public class CustomerProfile {
     public CustomerProfile() {
     }
     
-    public CustomerProfile(String customerId, String fullName, String email, String phone, String currentTier, Boolean active, LocalDateTime createdAt) {
+    public CustomerProfile(String customerId, String fullName, String email, 
+                          String phone, String currentTier, Boolean active, 
+                          LocalDateTime createdAt) {
         this.customerId = customerId;
         this.fullName = fullName;
         this.email = email;
