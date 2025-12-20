@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class JwtUtils {
+public class JwtUtil {
     
     private final String secretKey;
     private final long expirationMillis;
