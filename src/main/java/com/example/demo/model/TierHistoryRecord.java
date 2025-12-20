@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tier_history_records")
-public class TierHistory {
+public class TierHistoryRecord {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +26,10 @@ public class TierHistory {
     @Column(nullable = false, updatable = false)
     private LocalDateTime changedAt;
     
-    public TierHistory() {
+    public TierHistoryRecord() {
     }
     
-    public TierHistory(Long customerId, String oldTier, String newTier, 
+    public TierHistoryRecord(Long customerId, String oldTier, String newTier, 
                             String reason, LocalDateTime changedAt) {
         this.customerId = customerId;
         this.oldTier = oldTier;
