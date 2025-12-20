@@ -41,4 +41,23 @@ public class CustomerProfileServiceImpl implements CustomerProfileService {
     }
     
     @Override
-    public List
+    public List<CustomerProfile> getAllCustomers() {
+        return customerProfileRepository.findAll();
+    }
+    
+    @Override
+    public CustomerProfile updateTier(Long id, String newTier) {
+        CustomerProfile customer = customerProfileRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+        customer.setCurrentTier(newTier);
+        return customerProfileRepository.save(customer);
+    }
+    
+    @Override
+    public CustomerProfile updateStatus(Long id, boolean active) {
+        CustomerProfile customer = customerProfileRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+        customer.setActive(active);
+        return customerProfileRepository.save(customer);
+    }
+}

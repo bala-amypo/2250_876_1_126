@@ -40,4 +40,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String email = jwtUtil.extractEmail(token);
                 String role = jwtUtil.extractRole(token);
                 
-                if (email != null && SecurityContextHolder.getContext().getAuthentication() == null
+                if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    if (!role.startsWith("ROLE_")) {
+                        role = "ROLE_" + role;
+                    }
+                    
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            email, 
+                            null, 
+                            Collections.singletonList(new SimpleGrantedAuthority(role))
+                    );
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            } catch (ExpiredJwtException e) {
+                logger.error("JWT token has expired");
+            } catch (JwtException e) {
+                logger.error("JWT validation failed: " + e.getMessage());
+            }
+        }
+        
+        filterChain.doFilter(request, response);
+    }
+}
