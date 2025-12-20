@@ -16,7 +16,7 @@ public class CustomerUserDetailsService implements UserDetailsService {
     
     private final CustomerProfileRepository customerProfileRepository;
     
-    public CustomUserDetailsService(CustomerProfileRepository customerProfileRepository) {
+    public CustomerUserDetailsService(CustomerProfileRepository customerProfileRepository) {
         this.customerProfileRepository = customerProfileRepository;
     }
     

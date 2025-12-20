@@ -26,10 +26,10 @@ public class TierHistory {
     @Column(nullable = false, updatable = false)
     private LocalDateTime changedAt;
     
-    public TierHistoryRecord() {
+    public TierHistory() {
     }
     
-    public TierHistoryRecord(Long customerId, String oldTier, String newTier, 
+    public TierHistory(Long customerId, String oldTier, String newTier, 
                             String reason, LocalDateTime changedAt) {
         this.customerId = customerId;
         this.oldTier = oldTier;
