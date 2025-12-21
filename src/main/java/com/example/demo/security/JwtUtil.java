@@ -4,7 +4,9 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import java.security.Key;
+
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,14 +17,10 @@ public class JwtUtil {
     private final String secretKey;
     private final long expirationMillis;
     
-    public JwtUtil(@Value("${jwt.secret}") String secretKey,
-                   @Value("${jwt.expiration}") long expirationMillis) {
+    public JwtUtil(@Value("${jwt.secret:mySecretKeyForJWTTokenGenerationAndValidation12345}") String secretKey,
+                   @Value("${jwt.expiration:86400000}") long expirationMillis) {
         this.secretKey = secretKey;
         this.expirationMillis = expirationMillis;
-    }
-    
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
     
     public String generateToken(Long customerId, String email, String role) {
@@ -31,21 +29,24 @@ public class JwtUtil {
         claims.put("email", email);
         claims.put("role", role);
         
+        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .claims(claims)
+                .subject(email)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expirationMillis))
+                .signWith(key)
                 .compact();
     }
     
-    public Claims validateToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+    public Claims validateToken(String token) throws JwtException {
+        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        return Jwts.parser()
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
     
     public String extractEmail(String token) {
@@ -53,7 +54,11 @@ public class JwtUtil {
     }
     
     public Long extractCustomerId(String token) {
-        return validateToken(token).get("customerId", Long.class);
+        Object customerIdObj = validateToken(token).get("customerId");
+        if (customerIdObj instanceof Integer) {
+            return ((Integer) customerIdObj).longValue();
+        }
+        return (Long) customerIdObj;
     }
     
     public String extractRole(String token) {
