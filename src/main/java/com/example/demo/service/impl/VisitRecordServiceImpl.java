@@ -7,28 +7,32 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 @Service
 public class VisitRecordServiceImpl implements VisitRecordService {
 
     private final VisitRecordRepository visitRecordRepository;
 
-    private static final Set<String> VALID_CHANNELS =
-            Set.of("STORE", "APP", "WEB");
-
+    // Constructor Injection
     public VisitRecordServiceImpl(VisitRecordRepository visitRecordRepository) {
         this.visitRecordRepository = visitRecordRepository;
     }
 
     @Override
-    public VisitRecord recordVisit(VisitRecord visit) {
-
-        if (!VALID_CHANNELS.contains(visit.getChannel())) {
+    public VisitRecord recordVisit(VisitRecord visitRecord) {
+        String channel = visitRecord.getChannel();
+        if (!( "STORE".equalsIgnoreCase(channel)
+                || "APP".equalsIgnoreCase(channel)
+                || "WEB".equalsIgnoreCase(channel))) {
             throw new IllegalArgumentException("Invalid channel");
         }
+        return visitRecordRepository.save(visitRecord);
+    }
 
-        return visitRecordRepository.save(visit);
+    @Override
+    public VisitRecord getVisitById(Long id) {
+        return visitRecordRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Visit record not found"));
     }
 
     @Override
@@ -39,11 +43,5 @@ public class VisitRecordServiceImpl implements VisitRecordService {
     @Override
     public List<VisitRecord> getAllVisits() {
         return visitRecordRepository.findAll();
-    }
-
-    @Override
-    public VisitRecord getVisitById(Long id) {
-        return visitRecordRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Visit record not found"));
     }
 }

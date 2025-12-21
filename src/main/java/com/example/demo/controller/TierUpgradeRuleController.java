@@ -3,55 +3,53 @@ package com.example.demo.controller;
 import com.example.demo.model.TierUpgradeRule;
 import com.example.demo.service.TierUpgradeRuleService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/tier-rules")
-@Tag(name = "Tier Upgrade Rules", description = "Manage tier upgrade rules and thresholds")
+@Tag(name = "Tier Upgrade Rules", description = "CRUD APIs for Tier Upgrade Rules")
 public class TierUpgradeRuleController {
-    
+
     private final TierUpgradeRuleService tierUpgradeRuleService;
-    
+
     public TierUpgradeRuleController(TierUpgradeRuleService tierUpgradeRuleService) {
         this.tierUpgradeRuleService = tierUpgradeRuleService;
     }
-    
+
+    @Operation(summary = "Create Tier Upgrade Rule")
     @PostMapping
-    @Operation(summary = "Create rule", description = "Create a new tier upgrade rule")
-    public ResponseEntity<TierUpgradeRule> createRule(@RequestBody TierUpgradeRule rule) {
-        return ResponseEntity.ok(tierUpgradeRuleService.createRule(rule));
+    public TierUpgradeRule createRule(@RequestBody TierUpgradeRule rule) {
+        return tierUpgradeRuleService.createRule(rule);
     }
-    
+
+    @Operation(summary = "Update Tier Upgrade Rule")
     @PutMapping("/{id}")
-    @Operation(summary = "Update rule", description = "Update an existing tier upgrade rule")
-    public ResponseEntity<TierUpgradeRule> updateRule(
-            @Parameter(description = "Rule ID") @PathVariable Long id,
+    public TierUpgradeRule updateRule(
+            @PathVariable Long id,
             @RequestBody TierUpgradeRule rule) {
-        return ResponseEntity.ok(tierUpgradeRuleService.updateRule(id, rule));
+        return tierUpgradeRuleService.updateRule(id, rule);
     }
-    
+
+    @Operation(summary = "Get Active Tier Rules")
     @GetMapping("/active")
-    @Operation(summary = "Get active rules", description = "Retrieve all active tier upgrade rules")
-    public ResponseEntity<List<TierUpgradeRule>> getActiveRules() {
-        return ResponseEntity.ok(tierUpgradeRuleService.getActiveRules());
+    public List<TierUpgradeRule> getActiveRules() {
+        return tierUpgradeRuleService.getActiveRules();
     }
-    
+
+    @Operation(summary = "Get All Tier Rules")
     @GetMapping
-    @Operation(summary = "Get all rules", description = "Retrieve all tier upgrade rules")
-    public ResponseEntity<List<TierUpgradeRule>> getAllRules() {
-        return ResponseEntity.ok(tierUpgradeRuleService.getAllRules());
+    public List<TierUpgradeRule> getAllRules() {
+        return tierUpgradeRuleService.getAllRules();
     }
-    
+
+    @Operation(summary = "Get Rule by From-Tier and To-Tier")
     @GetMapping("/lookup")
-    @Operation(summary = "Lookup rule", description = "Find rule by from and to tier")
-    public ResponseEntity<TierUpgradeRule> getRule(
-            @Parameter(description = "From tier") @RequestParam String fromTier,
-            @Parameter(description = "To tier") @RequestParam String toTier) {
-        return ResponseEntity.ok(tierUpgradeRuleService.getRule(fromTier, toTier));
+    public TierUpgradeRule getRule(
+            @RequestParam String fromTier,
+            @RequestParam String toTier) {
+        return tierUpgradeRuleService.getRule(fromTier, toTier);
     }
 }
