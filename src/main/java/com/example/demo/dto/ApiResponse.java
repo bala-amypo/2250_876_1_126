@@ -5,7 +5,13 @@ public class ApiResponse {
     private String message;
     private Object data;
     
-    public ApiResponse() {}
+    public ApiResponse() {
+    }
+    
+    public ApiResponse(boolean success, String message) {
+        this.success = success;
+        this.message = message;
+    }
     
     public ApiResponse(boolean success, String message, Object data) {
         this.success = success;
@@ -13,12 +19,28 @@ public class ApiResponse {
         this.data = data;
     }
     
-    public boolean isSuccess() { return success; }
-    public void setSuccess(boolean success) { this.success = success; }
+    // Getters and Setters
+    public boolean isSuccess() {
+        return success;
+    }
     
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
     
-    public Object getData() { return data; }
-    public void setData(Object data) { this.data = data; }
+    public String getMessage() {
+        return message;
+    }
+    
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
+    public Object getData() {
+        return data;
+    }
+    
+    public void setData(Object data) {
+        this.data = data;
+    }
 }
