@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.CustomerProfile;
+import com.example.demo.model.CustomerProfile;
 import com.example.demo.service.CustomerProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.TierHistoryRecord;
+import com.example.demo.model.TierHistoryRecord;
 import com.example.demo.service.TierUpgradeEngineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

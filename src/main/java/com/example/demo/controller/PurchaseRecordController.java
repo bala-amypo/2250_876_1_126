@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.PurchaseRecord;
+import com.example.demo.model.PurchaseRecord;
 import com.example.demo.service.PurchaseRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

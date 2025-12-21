@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.TierUpgradeRule;
+import com.example.demo.model.TierUpgradeRule;
 import com.example.demo.service.TierUpgradeRuleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

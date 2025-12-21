@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
-import com.example.demo.entity.CustomerProfile;
+import com.example.demo.model.CustomerProfile;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.CustomerProfileService;
 import org.springframework.security.crypto.password.PasswordEncoder;

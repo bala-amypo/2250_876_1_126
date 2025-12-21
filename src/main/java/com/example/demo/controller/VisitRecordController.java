@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.VisitRecord;
+import com.example.demo.model.VisitRecord;
 import com.example.demo.service.VisitRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
