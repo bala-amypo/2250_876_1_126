@@ -21,14 +21,10 @@ public class TierHistoryRecord {
 
     private LocalDateTime upgradedAt;
 
-    // No-arg constructor
-    public TierHistoryRecord() {
-    }
+    // ---- Constructors ----
+    public TierHistoryRecord() {}
 
-    // Parameterized constructor
-    public TierHistoryRecord(Long customerId, String oldTier,
-                             String newTier, String reason,
-                             LocalDateTime upgradedAt) {
+    public TierHistoryRecord(Long customerId, String oldTier, String newTier, String reason, LocalDateTime upgradedAt) {
         this.customerId = customerId;
         this.oldTier = oldTier;
         this.newTier = newTier;
@@ -36,22 +32,13 @@ public class TierHistoryRecord {
         this.upgradedAt = upgradedAt;
     }
 
-    @PrePersist
-    public void onCreate() {
-        this.upgradedAt = LocalDateTime.now();
-    }
-
-    // Getters and Setters
+    // ---- Getters & Setters ----
     public Long getId() {
         return id;
     }
 
     public Long getCustomerId() {
         return customerId;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setCustomerId(Long customerId) {
