@@ -9,8 +9,10 @@ import java.util.List;
 public interface TierHistoryRecordRepository
         extends JpaRepository<TierHistoryRecord, Long> {
 
+    // Extra method 1
     List<TierHistoryRecord> findByCustomerId(Long customerId);
 
+    // Extra method 2 (must match entity field: changedAt)
     List<TierHistoryRecord> findByChangedAtBetween(
             LocalDateTime start,
             LocalDateTime end
