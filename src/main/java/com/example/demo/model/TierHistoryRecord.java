@@ -19,20 +19,23 @@ public class TierHistoryRecord {
 
     private String reason;
 
-    private LocalDateTime upgradedAt;
+    // REQUIRED for helper file method
+    private LocalDateTime changedAt;
 
-    // ---- Constructors ----
-    public TierHistoryRecord() {}
+    // Constructors
+    public TierHistoryRecord() {
+    }
 
-    public TierHistoryRecord(Long customerId, String oldTier, String newTier, String reason, LocalDateTime upgradedAt) {
+    public TierHistoryRecord(Long customerId, String oldTier, String newTier,
+                             String reason, LocalDateTime changedAt) {
         this.customerId = customerId;
         this.oldTier = oldTier;
         this.newTier = newTier;
         this.reason = reason;
-        this.upgradedAt = upgradedAt;
+        this.changedAt = changedAt;
     }
 
-    // ---- Getters & Setters ----
+    // Getters & Setters
     public Long getId() {
         return id;
     }
@@ -69,11 +72,11 @@ public class TierHistoryRecord {
         this.reason = reason;
     }
 
-    public LocalDateTime getUpgradedAt() {
-        return upgradedAt;
+    public LocalDateTime getChangedAt() {
+        return changedAt;
     }
 
-    public void setUpgradedAt(LocalDateTime upgradedAt) {
-        this.upgradedAt = upgradedAt;
+    public void setChangedAt(LocalDateTime changedAt) {
+        this.changedAt = changedAt;
     }
 }
