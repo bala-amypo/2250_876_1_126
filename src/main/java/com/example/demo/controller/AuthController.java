@@ -1,86 +1,47 @@
 // package com.example.demo.controller;
 
-// import com.example.demo.dto.ApiResponse;
-// import com.example.demo.dto.LoginRequest;
-// import com.example.demo.dto.RegisterRequest;
-// import com.example.demo.model.CustomerProfile;
-// import com.example.demo.repository.CustomerProfileRepository;
+// import com.example.demo.dto.AuthRequest;
+// import com.example.demo.dto.AuthResponse;
 // import com.example.demo.security.JwtUtil;
-// import com.example.demo.service.CustomerProfileService;
-// import io.swagger.v3.oas.annotations.Operation;
-// import io.swagger.v3.oas.annotations.tags.Tag;
+
+// import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.http.ResponseEntity;
-// import org.springframework.security.crypto.password.PasswordEncoder;
+// import org.springframework.security.authentication.AuthenticationManager;
+// import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+// import org.springframework.security.core.Authentication;
+// import org.springframework.security.core.userdetails.UserDetails;
 // import org.springframework.web.bind.annotation.*;
 
-// import java.time.LocalDateTime;
-// import java.util.HashMap;
-// import java.util.Map;
-// import java.util.UUID;
-
 // @RestController
-// @RequestMapping("/auth")
-// @Tag(name = "Authentication", description = "Authentication endpoints")
+// @RequestMapping("/api/auth")
 // public class AuthController {
-    
-//     private final CustomerProfileService customerProfileService;
-//     private final CustomerProfileRepository customerProfileRepository;
+
+//     private final AuthenticationManager authenticationManager;
 //     private final JwtUtil jwtUtil;
-//     private final PasswordEncoder passwordEncoder;
-    
-//     public AuthController(CustomerProfileService customerProfileService,
-//                          CustomerProfileRepository customerProfileRepository,
-//                          JwtUtil jwtUtil, 
-//                          PasswordEncoder passwordEncoder) {
-//         this.customerProfileService = customerProfileService;
-//         this.customerProfileRepository = customerProfileRepository;
+
+//     @Autowired
+//     public AuthController(AuthenticationManager authenticationManager,
+//                           JwtUtil jwtUtil) {
+//         this.authenticationManager = authenticationManager;
 //         this.jwtUtil = jwtUtil;
-//         this.passwordEncoder = passwordEncoder;
 //     }
-    
-//     @PostMapping("/register")
-//     @Operation(summary = "Register a new customer", description = "Create a new customer account")
-//     public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
-//         try {
-//             CustomerProfile customer = new CustomerProfile();
-//             customer.setCustomerId(UUID.randomUUID().toString());
-//             customer.setEmail(request.getEmail());
-//             customer.setFullName(request.getFullName());
-//             customer.setPhone(request.getPhone());
-//             customer.setPassword(passwordEncoder.encode(request.getPassword()));
-//             customer.setRole(request.getRole() != null ? request.getRole() : "RETAIL_OPERATOR");
-//             customer.setCurrentTier("BRONZE");
-//             customer.setActive(true);
-//             customer.setCreatedAt(LocalDateTime.now());
-            
-//             CustomerProfile created = customerProfileService.createCustomer(customer);
-//             return ResponseEntity.ok(new ApiResponse(true, "Customer registered successfully", created));
-//         } catch (Exception e) {
-//             return ResponseEntity.badRequest().body(new ApiResponse(false, e.getMessage()));
-//         }
-//     }
-    
+
 //     @PostMapping("/login")
-//     @Operation(summary = "Login", description = "Authenticate and receive JWT token")
-//     public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest request) {
-//         try {
-//             // Find customer by email
-//             CustomerProfile customer = customerProfileRepository.findByEmail(request.getEmail())
-//                     .orElseThrow(() -> new RuntimeException("Invalid credentials"));
-            
-//             if (passwordEncoder.matches(request.getPassword(), customer.getPassword())) {
-//                 String token = jwtUtil.generateToken(customer.getId(), customer.getEmail(), customer.getRole());
-                
-//                 Map<String, Object> data = new HashMap<>();
-//                 data.put("token", token);
-//                 data.put("customer", customer);
-                
-//                 return ResponseEntity.ok(new ApiResponse(true, "Login successful", data));
-//             } else {
-//                 return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid credentials"));
-//             }
-//         } catch (Exception e) {
-//             return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid credentials"));
-//         }
+//     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+
+//         Authentication authentication = authenticationManager.authenticate(
+//                 new UsernamePasswordAuthenticationToken(
+//                         request.getUsername(),
+//                         request.getPassword()
+//                 )
+//         );
+
+//         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//         String token = jwtUtil.generateToken(userDetails.getUsername());
+
+//         AuthResponse response = new AuthResponse();
+//         response.setToken(token);
+
+//         return ResponseEntity.ok(response);
 //     }
 // }
