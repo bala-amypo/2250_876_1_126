@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.PurchaseRecord;
+import com.example.demo.model.PurchaseRecord;
 import java.util.List;
 
 public interface PurchaseRecordService {
