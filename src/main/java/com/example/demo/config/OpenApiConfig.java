@@ -14,7 +14,7 @@
 //     @Bean
 //     public OpenAPI customOpenAPI() {
 //         return new OpenAPI()
-//                 .info(new Info()
+//                 .info        (new Info()
 //                         .title("Customer Loyalty Tier Upgrader API")
 //                         .version("1.0")
 //                         .description("A JWT-secured Spring Boot API for managing customer loyalty tiers, " +
