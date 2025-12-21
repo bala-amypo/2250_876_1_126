@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.model.CustomerProfile;
-
 import java.util.List;
 
 public interface CustomerProfileService {
@@ -10,11 +9,9 @@ public interface CustomerProfileService {
 
     CustomerProfile getCustomerById(Long id);
 
-    CustomerProfile findByCustomerId(String customerId);
-
     List<CustomerProfile> getAllCustomers();
 
-    CustomerProfile updateTier(Long id, String newTier);
+    CustomerProfile updateCustomer(Long id, CustomerProfile customer);
 
-    CustomerProfile updateStatus(Long id, boolean active);
+    void deleteCustomer(Long id);
 }

@@ -3,55 +3,52 @@ package com.example.demo.controller;
 import com.example.demo.model.CustomerProfile;
 import com.example.demo.service.CustomerProfileService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")
-@Tag(name = "Customer Profiles", description = "Manage customer profiles and loyalty tiers")
+@Tag(name = "Customer Profiles", description = "CRUD APIs for Customer Profiles")
 public class CustomerProfileController {
-    
+
     private final CustomerProfileService customerProfileService;
-    
+
     public CustomerProfileController(CustomerProfileService customerProfileService) {
         this.customerProfileService = customerProfileService;
     }
-    
+
+    @Operation(summary = "Create Customer")
     @PostMapping
-    @Operation(summary = "Create customer", description = "Create a new customer profile")
-    public ResponseEntity<CustomerProfile> createCustomer(@RequestBody CustomerProfile customer) {
-        return ResponseEntity.ok(customerProfileService.createCustomer(customer));
+    public CustomerProfile createCustomer(@RequestBody CustomerProfile customer) {
+        return customerProfileService.createCustomer(customer);
     }
-    
+
+    @Operation(summary = "Get Customer by ID")
     @GetMapping("/{id}")
-    @Operation(summary = "Get customer by ID", description = "Retrieve customer profile by ID")
-    public ResponseEntity<CustomerProfile> getCustomerById(
-            @Parameter(description = "Customer ID") @PathVariable Long id) {
-        return ResponseEntity.ok(customerProfileService.getCustomerById(id));
+    public CustomerProfile getCustomerById(@PathVariable Long id) {
+        return customerProfileService.getCustomerById(id);
     }
-    
+
+    @Operation(summary = "Get All Customers")
     @GetMapping
-    @Operation(summary = "Get all customers", description = "Retrieve all customer profiles")
-    public ResponseEntity<List<CustomerProfile>> getAllCustomers() {
-        return ResponseEntity.ok(customerProfileService.getAllCustomers());
+    public List<CustomerProfile> getAllCustomers() {
+        return customerProfileService.getAllCustomers();
     }
-    
-    @PutMapping("/{id}/tier")
-    @Operation(summary = "Update customer tier", description = "Update customer's loyalty tier")
-    public ResponseEntity<CustomerProfile> updateTier(
-            @Parameter(description = "Customer ID") @PathVariable Long id,
-            @Parameter(description = "New tier level") @RequestParam String newTier) {
-        return ResponseEntity.ok(customerProfileService.updateTier(id, newTier));
+
+    @Operation(summary = "Update Customer")
+    @PutMapping("/{id}")
+    public CustomerProfile updateCustomer(
+            @PathVariable Long id,
+            @RequestBody CustomerProfile customer) {
+        return customerProfileService.updateCustomer(id, customer);
     }
-    
-    @GetMapping("/lookup/{customerId}")
-    @Operation(summary = "Lookup customer", description = "Find customer by customer ID")
-    public ResponseEntity<CustomerProfile> findByCustomerId(
-            @Parameter(description = "Customer ID") @PathVariable String customerId) {
-        return ResponseEntity.ok(customerProfileService.findByCustomerId(customerId));
+
+    @Operation(summary = "Delete Customer")
+    @DeleteMapping("/{id}")
+    public String deleteCustomer(@PathVariable Long id) {
+        customerProfileService.deleteCustomer(id);
+        return "Customer deleted successfully";
     }
 }
