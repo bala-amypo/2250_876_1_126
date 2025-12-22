@@ -15,20 +15,17 @@ public class VisitRecord {
 
     private LocalDate visitDate;
 
-    private String channel; // STORE, APP, WEB
+    private String channel; 
 
-    // No-arg constructor
     public VisitRecord() {
     }
 
-    // Parameterized constructor
     public VisitRecord(Long customerId, LocalDate visitDate, String channel) {
         this.customerId = customerId;
         this.visitDate = visitDate;
         this.channel = channel;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

@@ -13,7 +13,6 @@ public class VisitRecordServiceImpl implements VisitRecordService {
 
     private final VisitRecordRepository visitRecordRepository;
 
-    // Constructor Injection
     public VisitRecordServiceImpl(VisitRecordRepository visitRecordRepository) {
         this.visitRecordRepository = visitRecordRepository;
     }
