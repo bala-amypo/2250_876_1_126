@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -6,77 +6,58 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tier_history_records")
 public class TierHistoryRecord {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private CustomerProfile customer;
 
+    @Column(nullable = false)
     private String oldTier;
 
+    @Column(nullable = false)
     private String newTier;
 
+    @Column
     private String reason;
 
-    // REQUIRED for helper file method
+    @Column(nullable = false, updatable = false)
     private LocalDateTime changedAt;
 
-    // Constructors
-    public TierHistoryRecord() {
-    }
+    public TierHistoryRecord() {}
 
-    public TierHistoryRecord(Long customerId, String oldTier, String newTier,
-                             String reason, LocalDateTime changedAt) {
-        this.customerId = customerId;
+    public TierHistoryRecord(Long customerId, String oldTier, String newTier, String reason, LocalDateTime changedAt) {
         this.oldTier = oldTier;
         this.newTier = newTier;
         this.reason = reason;
         this.changedAt = changedAt;
     }
 
-    // Getters & Setters
-    public Long getId() {
-        return id;
+    @PrePersist
+    protected void onCreate() {
+        if (changedAt == null) {
+            changedAt = LocalDateTime.now();
+        }
     }
 
-    public Long getCustomerId() {
-        return customerId;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
+    public CustomerProfile getCustomer() { return customer; }
+    public void setCustomer(CustomerProfile customer) { this.customer = customer; }
 
-    public String getOldTier() {
-        return oldTier;
-    }
+    public String getOldTier() { return oldTier; }
+    public void setOldTier(String oldTier) { this.oldTier = oldTier; }
 
-    public void setOldTier(String oldTier) {
-        this.oldTier = oldTier;
-    }
+    public String getNewTier() { return newTier; }
+    public void setNewTier(String newTier) { this.newTier = newTier; }
 
-    public String getNewTier() {
-        return newTier;
-    }
+    public String getReason() { return reason; }
+    public void setReason(String reason) { this.reason = reason; }
 
-    public void setNewTier(String newTier) {
-        this.newTier = newTier;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public LocalDateTime getChangedAt() {
-        return changedAt;
-    }
-
-    public void setChangedAt(LocalDateTime changedAt) {
-        this.changedAt = changedAt;
-    }
+    public LocalDateTime getChangedAt() { return changedAt; }
+    public void setChangedAt(LocalDateTime changedAt) { this.changedAt = changedAt; }
 }
