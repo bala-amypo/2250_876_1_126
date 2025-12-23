@@ -28,11 +28,15 @@ public class CustomerProfile {
 
     private LocalDateTime createdAt;
 
+    // ⭐ NEW FIELDS FOR AUTHENTICATION
+    private String password;
+    private String role;
+
     // No-arg constructor
     public CustomerProfile() {
     }
 
-    // Parameterized constructor
+    // Parameterized constructor (original - as per helper document)
     public CustomerProfile(String customerId, String fullName, String email,
                            String phone, String currentTier, Boolean active) {
         this.customerId = customerId;
@@ -41,6 +45,19 @@ public class CustomerProfile {
         this.phone = phone;
         this.currentTier = currentTier;
         this.active = active;
+    }
+
+    // Extended parameterized constructor (as per helper document)
+    public CustomerProfile(String customerId, String fullName, String email,
+                           String phone, String currentTier, Boolean active,
+                           LocalDateTime createdAt) {
+        this.customerId = customerId;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        this.currentTier = currentTier;
+        this.active = active;
+        this.createdAt = createdAt;
     }
 
     @PrePersist
@@ -54,9 +71,16 @@ public class CustomerProfile {
         }
     }
 
+    // ============================================
     // Getters & Setters
+    // ============================================
+    
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCustomerId() {
@@ -65,10 +89,6 @@ public class CustomerProfile {
 
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFullName() {
@@ -113,5 +133,23 @@ public class CustomerProfile {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    // ⭐ NEW GETTERS AND SETTERS FOR PASSWORD AND ROLE
+    
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
