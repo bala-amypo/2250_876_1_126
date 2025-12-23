@@ -1,35 +1,33 @@
 package com.example.demo.security;
 
-import com.example.demo.model.CustomerProfile;
+import com.example.demo.entity.CustomerProfile;
 import com.example.demo.repository.CustomerProfileRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final CustomerProfileRepository customerProfileRepository;
+    private final CustomerProfileRepository repository;
 
-    public CustomUserDetailsService(CustomerProfileRepository customerProfileRepository) {
-        this.customerProfileRepository = customerProfileRepository;
+    public CustomUserDetailsService(CustomerProfileRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        CustomerProfile customer = customerProfileRepository.findByEmail(email)
+    public UserDetails loadUserByUsername(String email)
+            throws UsernameNotFoundException {
+
+        CustomerProfile customer = repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return User.builder()
-                .username(customer.getEmail())
-                .password(customer.getPassword())
-                .authorities(Collections.singletonList(
-                        new SimpleGrantedAuthority("ROLE_" + customer.getRole())))
-                .build();
+        return new User(
+                customer.getEmail(),
+                customer.getPassword(),   // 🔴 REAL password from DB
+                List.of(new SimpleGrantedAuthority("ROLE_" + customer.getRole()))
+        );
     }
 }
