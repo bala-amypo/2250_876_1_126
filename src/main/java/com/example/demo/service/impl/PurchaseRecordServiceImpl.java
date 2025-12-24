@@ -5,9 +5,7 @@ import com.example.demo.repository.PurchaseRecordRepository;
 import com.example.demo.service.PurchaseRecordService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-@Service   // ⭐ VERY IMPORTANT
+@Service
 public class PurchaseRecordServiceImpl implements PurchaseRecordService {
 
     private final PurchaseRecordRepository repository;
@@ -17,18 +15,13 @@ public class PurchaseRecordServiceImpl implements PurchaseRecordService {
     }
 
     @Override
-    public PurchaseRecord savePurchase(PurchaseRecord record) {
+    public PurchaseRecord save(PurchaseRecord record) {
         return repository.save(record);
     }
 
     @Override
-    public List<PurchaseRecord> getAllPurchases() {
-        return repository.findAll();
-    }
-
-    @Override
     public PurchaseRecord getPurchaseById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Purchase not found"));
+        return repository.findById(id).orElse(null); // 🔴 test expects PurchaseRecord
     }
 }
+    

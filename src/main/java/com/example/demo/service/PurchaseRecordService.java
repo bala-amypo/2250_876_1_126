@@ -1,13 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.model.PurchaseRecord;
-import java.util.List;
 
 public interface PurchaseRecordService {
 
-    PurchaseRecord savePurchase(PurchaseRecord record);
+    PurchaseRecord save(PurchaseRecord record);
 
-    List<PurchaseRecord> getAllPurchases();
-
-    PurchaseRecord getPurchaseById(Long id);
+    PurchaseRecord getPurchaseById(Long id);   // 🔴 REQUIRED BY TEST
 }

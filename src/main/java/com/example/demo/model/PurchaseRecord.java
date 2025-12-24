@@ -17,11 +17,9 @@ public class PurchaseRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String customerId;
+    private Long customerId;
 
     private Double amount;
 
-    private String description;
-
-    private LocalDateTime purchaseDate;
+    private LocalDateTime createdAt;   // 🔴 MUST be LocalDateTime
 }
