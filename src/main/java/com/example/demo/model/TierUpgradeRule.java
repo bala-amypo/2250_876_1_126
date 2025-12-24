@@ -1,81 +1,17 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
-import jakarta.persistence.*;
+import lombok.*;
 
-@Entity
-@Table(name = "tier_upgrade_rules", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"fromTier", "toTier"})
-})
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TierUpgradeRule {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
-    
     private String fromTier;
-    
     private String toTier;
-    
     private Double minSpend;
-    
     private Integer minVisits;
-    
-    private Boolean active = true;
-
-    public TierUpgradeRule() {}
-
-    public TierUpgradeRule(String fromTier, String toTier, Double minSpend, Integer minVisits, Boolean active) {
-        if (minSpend != null && minSpend < 0) {
-            throw new IllegalArgumentException("minSpend must be >= 0");
-        }
-        if (minVisits != null && minVisits < 0) {
-            throw new IllegalArgumentException("minVisits must be >= 0");
-        }
-        this.fromTier = fromTier;
-        this.toTier = toTier;
-        this.minSpend = minSpend;
-        this.minVisits = minVisits;
-        this.active = active != null ? active : true;
-    }
-
-    @PrePersist
-    @PreUpdate
-    protected void validate() {
-        if (minSpend != null && minSpend < 0) {
-            throw new IllegalArgumentException("minSpend must be >= 0");
-        }
-        if (minVisits != null && minVisits < 0) {
-            throw new IllegalArgumentException("minVisits must be >= 0");
-        }
-        if (active == null) {
-            active = true;
-        }
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getFromTier() { return fromTier; }
-    public void setFromTier(String fromTier) { this.fromTier = fromTier; }
-
-    public String getToTier() { return toTier; }
-    public void setToTier(String toTier) { this.toTier = toTier; }
-
-    public Double getMinSpend() { return minSpend; }
-    public void setMinSpend(Double minSpend) { 
-        if (minSpend != null && minSpend < 0) {
-            throw new IllegalArgumentException("minSpend must be >= 0");
-        }
-        this.minSpend = minSpend; 
-    }
-
-    public Integer getMinVisits() { return minVisits; }
-    public void setMinVisits(Integer minVisits) { 
-        if (minVisits != null && minVisits < 0) {
-            throw new IllegalArgumentException("minVisits must be >= 0");
-        }
-        this.minVisits = minVisits; 
-    }
-
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    private boolean active;
 }
