@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface CustomerProfileRepository
         extends JpaRepository<CustomerProfile, Long> {
 
-    Optional<CustomerProfile> findByCustomerId(String customerId);
-
-    // ✅ REQUIRED FOR AUTH & SECURITY
     Optional<CustomerProfile> findByEmail(String email);
+
+    // ✅ THIS FIXES YOUR ERROR
+    Optional<CustomerProfile> findByCustomerId(String customerId);
 }
