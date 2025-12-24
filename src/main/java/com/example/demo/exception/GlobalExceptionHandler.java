@@ -3,41 +3,35 @@ package com.example.demo.exception;
 import com.example.demo.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.NoSuchElementException;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<ApiResponse<Object>> handleCustomerNotFound(CustomerNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiResponse<>(false, ex.getMessage(), null));
-    }
-
-    @ExceptionHandler(TierUpgradeException.class)
-    public ResponseEntity<ApiResponse<Object>> handleTierUpgrade(TierUpgradeException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ApiResponse<>(false, ex.getMessage(), null));
-    }
-
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ApiResponse<Object>> handleNoSuchElement(NoSuchElementException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiResponse<>(false, "Resource not found", null));
+    public ResponseEntity<ApiResponse> handleNotFound(NoSuchElementException ex) {
+        return new ResponseEntity<>(
+                new ApiResponse(false, ex.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse<Object>> handleIllegalArgument(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ApiResponse<>(false, ex.getMessage(), null));
+    public ResponseEntity<ApiResponse> handleBadRequest(IllegalArgumentException ex) {
+        return new ResponseEntity<>(
+                new ApiResponse(false, ex.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> handleGeneral(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiResponse<>(false, "Internal server error", null));
+    public ResponseEntity<ApiResponse> handleGeneric(Exception ex) {
+        return new ResponseEntity<>(
+                new ApiResponse(false, "Internal server error"),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }
