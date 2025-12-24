@@ -1,40 +1,34 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.PurchaseRecord;
+import com.example.demo.repository.PurchaseRecordRepository;
 import com.example.demo.service.PurchaseRecordService;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
+@Service   // ⭐ VERY IMPORTANT
 public class PurchaseRecordServiceImpl implements PurchaseRecordService {
 
-    private final List<PurchaseRecord> purchases = new ArrayList<>();
+    private final PurchaseRecordRepository repository;
 
-    public PurchaseRecordServiceImpl() {}
-
-    @Override
-    public PurchaseRecord recordPurchase(PurchaseRecord purchase) {
-
-        if (purchase.getAmount() <= 0) {
-            throw new IllegalArgumentException("Amount must be positive");
-        }
-
-        purchase.setId((long) (purchases.size() + 1));
-        purchases.add(purchase);
-        return purchase;
+    public PurchaseRecordServiceImpl(PurchaseRecordRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public List<PurchaseRecord> getPurchasesByCustomer(Long customerId) {
-        return purchases;
+    public PurchaseRecord savePurchase(PurchaseRecord record) {
+        return repository.save(record);
     }
 
     @Override
     public List<PurchaseRecord> getAllPurchases() {
-        return purchases;
+        return repository.findAll();
     }
 
     @Override
-    public Optional<PurchaseRecord> getPurchaseById(Long id) {
-        return Optional.empty();
+    public PurchaseRecord getPurchaseById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Purchase not found"));
     }
 }
