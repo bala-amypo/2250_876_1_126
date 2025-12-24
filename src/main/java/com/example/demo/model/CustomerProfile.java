@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -6,150 +6,86 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "customer_profiles")
 public class CustomerProfile {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(unique = true, nullable = false)
     private String customerId;
-
+    
     private String fullName;
-
-    @Column(unique = true)
+    
+    @Column(unique = true, nullable = false)
     private String email;
-
-    @Column(unique = true)
+    
+    @Column(unique = true, nullable = false)
     private String phone;
-
-    private String currentTier;
-
-    private Boolean active;
-
+    
+    private String currentTier = "BRONZE";
+    
+    private Boolean active = true;
+    
+    private String password;
+    
+    private String role = "USER";
+    
     private LocalDateTime createdAt;
 
-    // ⭐ NEW FIELDS FOR AUTHENTICATION
-    private String password;
-    private String role;
+    public CustomerProfile() {}
 
-    // No-arg constructor
-    public CustomerProfile() {
-    }
-
-    // Parameterized constructor (original - as per helper document)
-    public CustomerProfile(String customerId, String fullName, String email,
-                           String phone, String currentTier, Boolean active) {
+    public CustomerProfile(String customerId, String fullName, String email, String phone, String currentTier, Boolean active, LocalDateTime createdAt) {
         this.customerId = customerId;
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
-        this.currentTier = currentTier;
-        this.active = active;
-    }
-
-    // Extended parameterized constructor (as per helper document)
-    public CustomerProfile(String customerId, String fullName, String email,
-                           String phone, String currentTier, Boolean active,
-                           LocalDateTime createdAt) {
-        this.customerId = customerId;
-        this.fullName = fullName;
-        this.email = email;
-        this.phone = phone;
-        this.currentTier = currentTier;
-        this.active = active;
+        this.currentTier = currentTier != null ? currentTier : "BRONZE";
+        this.active = active != null ? active : true;
         this.createdAt = createdAt;
     }
 
     @PrePersist
-    public void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        if (this.currentTier == null) {
-            this.currentTier = "BRONZE";
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
         }
-        if (this.active == null) {
-            this.active = true;
+        if (currentTier == null) {
+            currentTier = "BRONZE";
+        }
+        if (active == null) {
+            active = true;
+        }
+        if (role == null) {
+            role = "USER";
         }
     }
 
-    // ============================================
-    // Getters & Setters
-    // ============================================
-    
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getCustomerId() { return customerId; }
+    public void setCustomerId(String customerId) { this.customerId = customerId; }
 
-    public String getCustomerId() {
-        return customerId;
-    }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getFullName() {
-        return fullName;
-    }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+    public String getCurrentTier() { return currentTier; }
+    public void setCurrentTier(String currentTier) { this.currentTier = currentTier; }
 
-    public String getEmail() {
-        return email;
-    }
+    public Boolean isActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public String getPhone() {
-        return phone;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getCurrentTier() {
-        return currentTier;
-    }
-
-    public void setCurrentTier(String currentTier) {
-        this.currentTier = currentTier;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    // ⭐ NEW GETTERS AND SETTERS FOR PASSWORD AND ROLE
-    
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }

@@ -1,54 +1,61 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.CustomerProfile;
 import com.example.demo.service.CustomerProfileService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")
-@Tag(name = "Customer Profiles", description = "CRUD APIs for Customer Profiles")
-public class CustomerProfileController {
+@CrossOrigin(origins = "*")
+public class CustomerController {
 
     private final CustomerProfileService customerProfileService;
 
-    public CustomerProfileController(CustomerProfileService customerProfileService) {
+    public CustomerController(CustomerProfileService customerProfileService) {
         this.customerProfileService = customerProfileService;
     }
 
-    @Operation(summary = "Create Customer")
     @PostMapping
-    public CustomerProfile createCustomer(@RequestBody CustomerProfile customer) {
-        return customerProfileService.createCustomer(customer);
+    public ResponseEntity<ApiResponse<CustomerProfile>> createCustomer(@RequestBody CustomerProfile customer) {
+        try {
+            CustomerProfile created = customerProfileService.createCustomer(customer);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Customer created successfully", created));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
     }
 
-    @Operation(summary = "Get Customer by ID")
     @GetMapping("/{id}")
-    public CustomerProfile getCustomerById(@PathVariable Long id) {
-        return customerProfileService.getCustomerById(id);
+    public ResponseEntity<ApiResponse<CustomerProfile>> getCustomer(@PathVariable Long id) {
+        try {
+            CustomerProfile customer = customerProfileService.getCustomerById(id);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Customer retrieved successfully", customer));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
     }
 
-    @Operation(summary = "Get All Customers")
     @GetMapping
-    public List<CustomerProfile> getAllCustomers() {
-        return customerProfileService.getAllCustomers();
+    public ResponseEntity<ApiResponse<List<CustomerProfile>>> getAllCustomers() {
+        try {
+            List<CustomerProfile> customers = customerProfileService.getAllCustomers();
+            return ResponseEntity.ok(new ApiResponse<>(true, "Customers retrieved successfully", customers));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
     }
 
-    @Operation(summary = "Update Customer")
-    @PutMapping("/{id}")
-    public CustomerProfile updateCustomer(
-            @PathVariable Long id,
-            @RequestBody CustomerProfile customer) {
-        return customerProfileService.updateCustomer(id, customer);
-    }
-
-    @Operation(summary = "Delete Customer")
-    @DeleteMapping("/{id}")
-    public String deleteCustomer(@PathVariable Long id) {
-        customerProfileService.deleteCustomer(id);
-        return "Customer deleted successfully";
+    @PutMapping("/{id}/tier")
+    public ResponseEntity<ApiResponse<CustomerProfile>> updateTier(@PathVariable Long id, @RequestParam String tier) {
+        try {
+            CustomerProfile updated = customerProfileService.updateTier(id, tier);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Tier updated successfully", updated));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
     }
 }

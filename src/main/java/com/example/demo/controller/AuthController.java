@@ -1,47 +1,62 @@
-// package com.example.demo.controller;
+package com.example.demo.controller;
 
-// import com.example.demo.dto.AuthRequest;
-// import com.example.demo.dto.AuthResponse;
-// import com.example.demo.security.JwtUtil;
+import com.example.demo.dto.ApiResponse;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.model.CustomerProfile;
+import com.example.demo.security.JwtUtil;
+import com.example.demo.service.CustomerProfileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.security.authentication.AuthenticationManager;
-// import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-// import org.springframework.security.core.Authentication;
-// import org.springframework.security.core.userdetails.UserDetails;
-// import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
-// @RestController
-// @RequestMapping("/api/auth")
-// public class AuthController {
+@RestController
+@RequestMapping("/auth")
+@Tag(name = "Authentication")
+public class AuthController {
 
-//     private final AuthenticationManager authenticationManager;
-//     private final JwtUtil jwtUtil;
+    private final CustomerProfileService customerProfileService;
+    private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
-//     @Autowired
-//     public AuthController(AuthenticationManager authenticationManager,
-//                           JwtUtil jwtUtil) {
-//         this.authenticationManager = authenticationManager;
-//         this.jwtUtil = jwtUtil;
-//     }
+    public AuthController(CustomerProfileService customerProfileService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+        this.customerProfileService = customerProfileService;
+        this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-//     @PostMapping("/login")
-//     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+    @PostMapping("/register")
+    @Operation(summary = "Register new customer")
+    public ResponseEntity<ApiResponse<CustomerProfile>> register(@RequestBody RegisterRequest request) {
+        CustomerProfile customer = new CustomerProfile(
+            request.getEmail(),
+            request.getFullName(),
+            request.getEmail(),
+            request.getPhone(),
+            "BRONZE",
+            true,
+            LocalDateTime.now()
+        );
+        
+        CustomerProfile created = customerProfileService.createCustomer(customer);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Customer registered successfully", created));
+    }
 
-//         Authentication authentication = authenticationManager.authenticate(
-//                 new UsernamePasswordAuthenticationToken(
-//                         request.getUsername(),
-//                         request.getPassword()
-//                 )
-//         );
-
-//         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//         String token = jwtUtil.generateToken(userDetails.getUsername());
-
-//         AuthResponse response = new AuthResponse();
-//         response.setToken(token);
-
-//         return ResponseEntity.ok(response);
-//     }
-// }
+    @PostMapping("/login")
+    @Operation(summary = "Login customer")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> login(@RequestBody LoginRequest request) {
+        CustomerProfile customer = customerProfileService.findByEmail(request.getEmail());
+        
+        String token = jwtUtil.generateToken(customer.getId(), customer.getEmail(), "USER");
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("customer", customer);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Login successful", response));
+    }
+}

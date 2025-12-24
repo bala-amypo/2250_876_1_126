@@ -1,45 +1,62 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.PurchaseRecord;
 import com.example.demo.service.PurchaseRecordService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/purchases")
-@Tag(name = "Purchase Records", description = "CRUD APIs for Purchase Records")
-public class PurchaseRecordController {
+@CrossOrigin(origins = "*")
+public class PurchaseController {
 
     private final PurchaseRecordService purchaseRecordService;
 
-    public PurchaseRecordController(PurchaseRecordService purchaseRecordService) {
+    public PurchaseController(PurchaseRecordService purchaseRecordService) {
         this.purchaseRecordService = purchaseRecordService;
     }
 
-    @Operation(summary = "Create Purchase Record")
     @PostMapping
-    public PurchaseRecord createPurchase(@RequestBody PurchaseRecord purchaseRecord) {
-        return purchaseRecordService.recordPurchase(purchaseRecord);
+    public ResponseEntity<ApiResponse<PurchaseRecord>> recordPurchase(@RequestBody PurchaseRecord purchase) {
+        try {
+            PurchaseRecord created = purchaseRecordService.recordPurchase(purchase);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Purchase recorded successfully", created));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
     }
 
-    @Operation(summary = "Get Purchase by ID")
-    @GetMapping("/{id}")
-    public PurchaseRecord getPurchaseById(@PathVariable Long id) {
-        return purchaseRecordService.getPurchaseById(id);
-    }
-
-    @Operation(summary = "Get Purchases by Customer ID")
     @GetMapping("/customer/{customerId}")
-    public List<PurchaseRecord> getPurchasesByCustomer(@PathVariable Long customerId) {
-        return purchaseRecordService.getPurchasesByCustomer(customerId);
+    public ResponseEntity<ApiResponse<List<PurchaseRecord>>> getPurchasesByCustomer(@PathVariable Long customerId) {
+        try {
+            List<PurchaseRecord> purchases = purchaseRecordService.getPurchasesByCustomer(customerId);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Purchases retrieved successfully", purchases));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
     }
 
-    @Operation(summary = "Get All Purchases")
     @GetMapping
-    public List<PurchaseRecord> getAllPurchases() {
-        return purchaseRecordService.getAllPurchases();
+    public ResponseEntity<ApiResponse<List<PurchaseRecord>>> getAllPurchases() {
+        try {
+            List<PurchaseRecord> purchases = purchaseRecordService.getAllPurchases();
+            return ResponseEntity.ok(new ApiResponse<>(true, "All purchases retrieved successfully", purchases));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<PurchaseRecord>> getPurchaseById(@PathVariable Long id) {
+        try {
+            return purchaseRecordService.getPurchaseById(id)
+                .map(purchase -> ResponseEntity.ok(new ApiResponse<>(true, "Purchase retrieved successfully", purchase)))
+                .orElse(ResponseEntity.badRequest().body(new ApiResponse<>(false, "Purchase not found", null)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
+        }
     }
 }

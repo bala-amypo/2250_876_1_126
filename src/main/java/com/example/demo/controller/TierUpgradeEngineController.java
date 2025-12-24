@@ -1,9 +1,10 @@
-    package com.example.demo.controller;
+package com.example.demo.controller;
 
 import com.example.demo.model.TierHistoryRecord;
 import com.example.demo.service.TierUpgradeEngineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,47 +12,32 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tier-engine")
 @Tag(name = "Tier Upgrade Engine")
-public class TierUpgradeEngineController {
+public class TierUpgradeController {
 
     private final TierUpgradeEngineService tierUpgradeEngineService;
 
-    // Constructor Injection
-    public TierUpgradeEngineController(
-            TierUpgradeEngineService tierUpgradeEngineService) {
+    public TierUpgradeController(TierUpgradeEngineService tierUpgradeEngineService) {
         this.tierUpgradeEngineService = tierUpgradeEngineService;
     }
 
-    /**
-     * POST /api/tier-engine/evaluate/{customerId}
-     */
-    @Operation(summary = "Evaluate and upgrade customer tier")
     @PostMapping("/evaluate/{customerId}")
-    public TierHistoryRecord evaluateAndUpgradeTier(
-            @PathVariable Long customerId) {
-
-        return tierUpgradeEngineService
-                .evaluateAndUpgradeTier(customerId);
+    @Operation(summary = "Evaluate and upgrade customer tier")
+    public ResponseEntity<TierHistoryRecord> evaluateAndUpgrade(@PathVariable Long customerId) {
+        TierHistoryRecord result = tierUpgradeEngineService.evaluateAndUpgradeTier(customerId);
+        return ResponseEntity.ok(result);
     }
 
-    /**
-     * GET /api/tier-engine/history/{customerId}
-     */
-    @Operation(summary = "Get tier upgrade history by customer")
     @GetMapping("/history/{customerId}")
-    public List<TierHistoryRecord> getHistoryByCustomer(
-            @PathVariable Long customerId) {
-
-        return tierUpgradeEngineService
-                .getHistoryByCustomer(customerId);
+    @Operation(summary = "Get tier history for customer")
+    public ResponseEntity<List<TierHistoryRecord>> getHistory(@PathVariable Long customerId) {
+        List<TierHistoryRecord> history = tierUpgradeEngineService.getHistoryByCustomer(customerId);
+        return ResponseEntity.ok(history);
     }
 
-    /**
-     * GET /api/tier-engine
-     */
-    @Operation(summary = "Get all tier upgrade history")
     @GetMapping
-    public List<TierHistoryRecord> getAllHistory() {
-
-        return tierUpgradeEngineService.getAllHistory();
+    @Operation(summary = "Get all tier history")
+    public ResponseEntity<List<TierHistoryRecord>> getAllHistory() {
+        List<TierHistoryRecord> history = tierUpgradeEngineService.getAllHistory();
+        return ResponseEntity.ok(history);
     }
 }
