@@ -1,16 +1,10 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "visit_records")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class VisitRecord {
     
     @Id
@@ -26,4 +20,24 @@ public class VisitRecord {
     
     @Column(nullable = false)
     private String channel;
+    
+    public VisitRecord() {}
+    
+    public VisitRecord(Long customerId, LocalDate visitDate, String channel) {
+        this.visitDate = visitDate;
+        this.channel = channel;
+    }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public CustomerProfile getCustomer() { return customer; }
+    public void setCustomer(CustomerProfile customer) { this.customer = customer; }
+    
+    public LocalDate getVisitDate() { return visitDate; }
+    public void setVisitDate(LocalDate visitDate) { this.visitDate = visitDate; }
+    
+    public String getChannel() { return channel; }
+    public void setChannel(String channel) { this.channel = channel; }
 }
