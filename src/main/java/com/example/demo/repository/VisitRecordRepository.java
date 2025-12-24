@@ -1,12 +1,17 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.VisitRecord;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.example.demo.model.VisitRecord;
 
 import java.util.List;
+import java.util.Optional;
 
-@Repository
-public interface VisitRecordRepository extends JpaRepository<VisitRecord, Long> {
+public interface VisitRecordRepository {
+
+    VisitRecord save(VisitRecord visit);
+
+    Optional<VisitRecord> findById(Long id);
+
     List<VisitRecord> findByCustomerId(Long customerId);
+
+    List<VisitRecord> findAll();
 }

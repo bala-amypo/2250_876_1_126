@@ -2,31 +2,34 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.CustomerProfile;
 import com.example.demo.service.CustomerProfileService;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-@Service
 public class CustomerProfileServiceImpl implements CustomerProfileService {
 
     private final Map<Long, CustomerProfile> store = new HashMap<>();
-    private long id = 1;
+    private long idCounter = 1;
+
+    public CustomerProfileServiceImpl() {}
 
     @Override
     public CustomerProfile createCustomer(CustomerProfile customer) {
-        if (customer.getCustomerId() != null) {
-            Optional<CustomerProfile> existing = findByCustomerId(customer.getCustomerId());
-            if (existing.isPresent()) {
-                throw new IllegalArgumentException("Customer ID already exists");
-            }
+
+        boolean exists = store.values().stream()
+                .anyMatch(c -> c.getCustomerId().equals(customer.getCustomerId()));
+
+        if (exists) {
+            throw new IllegalArgumentException("Customer ID already exists");
         }
-        
-        customer.setId(id++);
+
+        customer.setId(idCounter++);
+        customer.setCreatedAt(LocalDateTime.now());
+
         if (customer.getCurrentTier() == null) {
             customer.setCurrentTier("BRONZE");
         }
-        customer.setCreatedAt(LocalDateTime.now());
+
         store.put(customer.getId(), customer);
         return customer;
     }
@@ -42,16 +45,8 @@ public class CustomerProfileServiceImpl implements CustomerProfileService {
     @Override
     public Optional<CustomerProfile> findByCustomerId(String customerId) {
         return store.values().stream()
-                .filter(c -> customerId.equals(c.getCustomerId()))
+                .filter(c -> c.getCustomerId().equals(customerId))
                 .findFirst();
-    }
-
-    @Override
-    public CustomerProfile findByEmail(String email) {
-        return store.values().stream()
-                .filter(c -> email.equals(c.getEmail()))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
     }
 
     @Override
@@ -60,9 +55,9 @@ public class CustomerProfileServiceImpl implements CustomerProfileService {
     }
 
     @Override
-    public CustomerProfile updateTier(Long id, String tier) {
+    public CustomerProfile updateTier(Long id, String newTier) {
         CustomerProfile customer = getCustomerById(id);
-        customer.setCurrentTier(tier);
+        customer.setCurrentTier(newTier);
         return customer;
     }
 

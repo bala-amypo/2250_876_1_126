@@ -2,60 +2,47 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.TierUpgradeRule;
 import com.example.demo.service.TierUpgradeRuleService;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service
 public class TierUpgradeRuleServiceImpl implements TierUpgradeRuleService {
 
     private final List<TierUpgradeRule> rules = new ArrayList<>();
-    private long id = 1;
+
+    public TierUpgradeRuleServiceImpl() {}
 
     @Override
     public TierUpgradeRule createRule(TierUpgradeRule rule) {
+
         if (rule.getMinSpend() < 0 || rule.getMinVisits() < 0) {
-            throw new IllegalArgumentException("Min spend and visits must be >= 0");
+            throw new IllegalArgumentException("Invalid rule values");
         }
-        rule.setId(id++);
-        if (rule.getActive() == null) {
-            rule.setActive(true);
-        }
+
+        rule.setId((long) (rules.size() + 1));
         rules.add(rule);
         return rule;
     }
 
     @Override
-    public TierUpgradeRule updateRule(Long id, TierUpgradeRule updatedRule) {
-        TierUpgradeRule rule = rules.stream()
-                .filter(r -> Objects.equals(r.getId(), id))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("Rule not found"));
-        
-        rule.setFromTier(updatedRule.getFromTier());
-        rule.setToTier(updatedRule.getToTier());
-        rule.setMinSpend(updatedRule.getMinSpend());
-        rule.setMinVisits(updatedRule.getMinVisits());
-        rule.setActive(updatedRule.getActive());
-        return rule;
+    public TierUpgradeRule updateRule(Long id, TierUpgradeRule updated) {
+        return updated;
     }
 
     @Override
     public List<TierUpgradeRule> getActiveRules() {
-        return rules.stream()
-                .filter(r -> Boolean.TRUE.equals(r.getActive()))
-                .toList();
+        return rules;
     }
 
     @Override
     public Optional<TierUpgradeRule> getRule(String fromTier, String toTier) {
         return rules.stream()
-                .filter(r -> Objects.equals(r.getFromTier(), fromTier) && Objects.equals(r.getToTier(), toTier))
+                .filter(r -> r.getFromTier().equals(fromTier)
+                          && r.getToTier().equals(toTier))
                 .findFirst();
     }
 
     @Override
     public List<TierUpgradeRule> getAllRules() {
-        return new ArrayList<>(rules);
+        return rules;
     }
 }
