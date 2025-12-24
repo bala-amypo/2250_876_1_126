@@ -6,6 +6,7 @@ import com.example.demo.model.CustomerProfile;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.CustomerProfileService;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
+    // ✅ Constructor Injection
     public AuthController(CustomerProfileService customerService,
                           JwtUtil jwtUtil,
                           PasswordEncoder passwordEncoder) {
@@ -28,8 +30,9 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // ================= REGISTER =================
     @PostMapping("/register")
-    public CustomerProfile register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
         CustomerProfile customer = new CustomerProfile();
         customer.setEmail(request.getEmail());
@@ -37,18 +40,24 @@ public class AuthController {
         customer.setPhone(request.getPhone());
         customer.setRole(request.getRole());
         customer.setPassword(passwordEncoder.encode(request.getPassword()));
+        customer.setCurrentTier("BRONZE");
+        customer.setActive(true);
 
-        return customerService.createCustomer(customer);
+        CustomerProfile savedCustomer = customerService.createCustomer(customer);
+
+        return ResponseEntity.ok(savedCustomer);
     }
 
+    // ================= LOGIN =================
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        CustomerProfile customer =
-                customerService.findByEmail(request.getEmail());
+        // ✅ FIXED OPTIONAL ISSUE
+        CustomerProfile customer = customerService.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
         if (!passwordEncoder.matches(request.getPassword(), customer.getPassword())) {
-            throw new IllegalArgumentException("Invalid credentials");
+            throw new RuntimeException("Invalid credentials");
         }
 
         String token = jwtUtil.generateToken(
@@ -59,8 +68,10 @@ public class AuthController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
-        response.put("customer", customer);
+        response.put("customerId", customer.getId());
+        response.put("email", customer.getEmail());
+        response.put("role", customer.getRole());
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 }

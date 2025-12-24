@@ -16,11 +16,26 @@ public class CustomerProfile {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    private String customerId;
+
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(unique = true)
+    private String phone;
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
     private String role;
+
+    @Column(nullable = false)
+    private String tier;
+
+    @Column(nullable = false)
+    private boolean active = true;
 }
