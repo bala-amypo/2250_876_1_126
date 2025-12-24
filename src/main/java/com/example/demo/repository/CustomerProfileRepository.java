@@ -10,6 +10,5 @@ public interface CustomerProfileRepository
 
     Optional<CustomerProfile> findByEmail(String email);
 
-    // ✅ THIS FIXES YOUR ERROR
     Optional<CustomerProfile> findByCustomerId(String customerId);
 }
