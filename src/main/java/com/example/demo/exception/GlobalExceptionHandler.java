@@ -5,33 +5,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ApiResponse> handleNotFound(NoSuchElementException ex) {
-        return new ResponseEntity<>(
-                new ApiResponse(false, ex.getMessage()),
-                HttpStatus.NOT_FOUND
-        );
+    public ResponseEntity<ApiResponse> handleNoSuchElement(NoSuchElementException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiResponse(false, ex.getMessage(), null));
     }
-
+    
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse> handleBadRequest(IllegalArgumentException ex) {
-        return new ResponseEntity<>(
-                new ApiResponse(false, ex.getMessage()),
-                HttpStatus.BAD_REQUEST
-        );
+    public ResponseEntity<ApiResponse> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse(false, ex.getMessage(), null));
     }
-
+    
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleGeneric(Exception ex) {
-        return new ResponseEntity<>(
-                new ApiResponse(false, "Internal server error"),
-                HttpStatus.INTERNAL_SERVER_ERROR
-        );
+    public ResponseEntity<ApiResponse> handleGenericException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse(false, "An error occurred: " + ex.getMessage(), null));
     }
 }

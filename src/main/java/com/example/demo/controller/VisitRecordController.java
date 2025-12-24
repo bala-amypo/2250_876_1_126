@@ -2,33 +2,48 @@ package com.example.demo.controller;
 
 import com.example.demo.model.VisitRecord;
 import com.example.demo.service.VisitRecordService;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/visits")
+@RequestMapping("/api/visits")
+@Tag(name = "Visit Records")
+@SecurityRequirement(name = "bearerAuth")
 public class VisitRecordController {
-
-    private final VisitRecordService visitService;
-
-    public VisitRecordController(VisitRecordService visitService) {
-        this.visitService = visitService;
+    
+    private final VisitRecordService visitRecordService;
+    
+    public VisitRecordController(VisitRecordService visitRecordService) {
+        this.visitRecordService = visitRecordService;
     }
-
+    
     @PostMapping
-    public VisitRecord recordVisit(@RequestBody VisitRecord visit) {
-        return visitService.recordVisit(visit);
+    @Operation(summary = "Record visit")
+    public ResponseEntity<VisitRecord> recordVisit(@RequestBody VisitRecord visit) {
+        return ResponseEntity.ok(visitRecordService.recordVisit(visit));
     }
-
-    @GetMapping("/customer/{id}")
-    public List<VisitRecord> getVisitsByCustomer(@PathVariable Long id) {
-        return visitService.getVisitsByCustomer(id);
+    
+    @GetMapping("/customer/{customerId}")
+    @Operation(summary = "Get visits by customer")
+    public ResponseEntity<List<VisitRecord>> getVisitsByCustomer(@PathVariable Long customerId) {
+        return ResponseEntity.ok(visitRecordService.getVisitsByCustomer(customerId));
     }
-
+    
+    @GetMapping("/{id}")
+    @Operation(summary = "Get visit by ID")
+    public ResponseEntity<VisitRecord> getVisitById(@PathVariable Long id) {
+        Optional<VisitRecord> visit = visitRecordService.getVisitById(id);
+        return visit.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    
     @GetMapping
-    public List<VisitRecord> getAllVisits() {
-        return visitService.getAllVisits();
+    @Operation(summary = "Get all visits")
+    public ResponseEntity<List<VisitRecord>> getAllVisits() {
+        return ResponseEntity.ok(visitRecordService.getAllVisits());
     }
 }
