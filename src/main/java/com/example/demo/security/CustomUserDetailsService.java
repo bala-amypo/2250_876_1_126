@@ -1,33 +1,30 @@
 package com.example.demo.security;
 
-import com.example.demo.entity.CustomerProfile;
-import com.example.demo.repository.CustomerProfileRepository;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.*;
+import com.example.demo.service.CustomerProfileService;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final CustomerProfileRepository repository;
+    private final CustomerProfileService customerProfileService;
 
-    public CustomUserDetailsService(CustomerProfileRepository repository) {
-        this.repository = repository;
+    public CustomUserDetailsService(CustomerProfileService customerProfileService) {
+        this.customerProfileService = customerProfileService;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-
-        CustomerProfile customer = repository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        return new User(
-                customer.getEmail(),
-                customer.getPassword(),   // 🔴 REAL password from DB
-                List.of(new SimpleGrantedAuthority("ROLE_" + customer.getRole()))
-        );
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        try {
+            var customer = customerProfileService.findByEmail(email);
+            return new User(customer.getEmail(), "password", new ArrayList<>());
+        } catch (Exception e) {
+            throw new UsernameNotFoundException("User not found: " + email);
+        }
     }
 }
