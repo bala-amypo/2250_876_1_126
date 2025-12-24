@@ -6,6 +6,9 @@ import com.example.demo.service.CustomerProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerProfileServiceImpl implements CustomerProfileService {
@@ -13,27 +16,38 @@ public class CustomerProfileServiceImpl implements CustomerProfileService {
     private final CustomerProfileRepository repository;
 
     @Override
-    public CustomerProfile getById(Long id) {
+    public CustomerProfile createCustomer(CustomerProfile customer) {
+        customer.setCurrentTier("BRONZE");
+        customer.setActive(true);
+        return repository.save(customer);
+    }
+
+    @Override
+    public CustomerProfile getCustomerById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
 
     @Override
-    public CustomerProfile save(CustomerProfile customer) {
-        return repository.save(customer);
+    public List<CustomerProfile> getAllCustomers() {
+        return repository.findAll();
     }
 
     @Override
-    public CustomerProfile upgradeTier(Long id, String tier) {
-        CustomerProfile customer = getById(id);
-        customer.setCurrentTier(tier);   // ✅ FIXED
+    public Optional<CustomerProfile> findByCustomerId(String customerId) {
+        return repository.findByCustomerId(customerId);
+    }
+
+    @Override
+    public CustomerProfile updateTier(Long id, String tier) {
+        CustomerProfile customer = getCustomerById(id);
+        customer.setCurrentTier(tier);
         return repository.save(customer);
     }
 
-    // ✅ THIS METHOD WAS MISSING — NOW FIXED
     @Override
     public CustomerProfile updateStatus(Long id, boolean status) {
-        CustomerProfile customer = getById(id);
+        CustomerProfile customer = getCustomerById(id);
         customer.setActive(status);
         return repository.save(customer);
     }
