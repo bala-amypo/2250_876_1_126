@@ -1,17 +1,35 @@
 package com.example.demo.model;
 
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "tier_upgrade_rules", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"fromTier", "toTier"})
+})
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TierUpgradeRule {
-
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(nullable = false)
     private String fromTier;
+    
+    @Column(nullable = false)
     private String toTier;
+    
+    @Column(nullable = false)
     private Double minSpend;
+    
+    @Column(nullable = false)
     private Integer minVisits;
-    private boolean active;
+    
+    @Column(nullable = false)
+    private Boolean active = true;
 }

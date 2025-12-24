@@ -1,25 +1,32 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "purchase_records")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PurchaseRecord {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long customerId;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private CustomerProfile customer;
+    
+    @Column(nullable = false)
     private Double amount;
-
-    private LocalDateTime createdAt;   // 🔴 MUST be LocalDateTime
+    
+    @Column(nullable = false)
+    private LocalDate purchaseDate;
+    
+    @Column(nullable = false)
+    private String storeLocation;
 }
