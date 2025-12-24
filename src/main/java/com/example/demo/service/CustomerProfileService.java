@@ -15,7 +15,7 @@ public interface CustomerProfileService {
 
     Optional<CustomerProfile> findByCustomerId(String customerId);
 
-    CustomerProfile updateTier(Long id, String tier);
+    Optional<CustomerProfile> findByEmail(String email);
 
-    CustomerProfile updateStatus(Long id, boolean status);
+    CustomerProfile updateTier(Long id, String tier);
 }

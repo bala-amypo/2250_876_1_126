@@ -12,16 +12,13 @@ public class AuthController {
 
     private final CustomerProfileService customerProfileService;
 
-    @PostMapping("/activate/{id}")
-    public String activateCustomer(@PathVariable Long id) {
+    @PostMapping("/register")
+    public CustomerProfile register(@RequestBody CustomerProfile customer) {
+        return customerProfileService.createCustomer(customer);
+    }
 
-        CustomerProfile customer = customerProfileService.getById(id);
-
-        // ✅ CORRECT setter
-        customer.setCurrentTier("SILVER");
-        customer.setActive(true);
-
-        customerProfileService.save(customer);
-        return "Customer activated";
+    @GetMapping("/{id}")
+    public CustomerProfile getCustomer(@PathVariable Long id) {
+        return customerProfileService.getCustomerById(id);
     }
 }

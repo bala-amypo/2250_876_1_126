@@ -39,16 +39,14 @@ public class CustomerProfileServiceImpl implements CustomerProfileService {
     }
 
     @Override
-    public CustomerProfile updateTier(Long id, String tier) {
-        CustomerProfile customer = getCustomerById(id);
-        customer.setCurrentTier(tier);
-        return repository.save(customer);
+    public Optional<CustomerProfile> findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
     @Override
-    public CustomerProfile updateStatus(Long id, boolean status) {
+    public CustomerProfile updateTier(Long id, String tier) {
         CustomerProfile customer = getCustomerById(id);
-        customer.setActive(status);
+        customer.setCurrentTier(tier);
         return repository.save(customer);
     }
 }

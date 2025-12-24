@@ -2,17 +2,15 @@ package com.example.demo.security;
 
 import com.example.demo.model.CustomerProfile;
 import com.example.demo.repository.CustomerProfileRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final CustomerProfileRepository repository;
-
-    public CustomUserDetailsService(CustomerProfileRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email)
@@ -20,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         CustomerProfile customer = repository.findByEmail(email)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found: " + email));
+                        new UsernameNotFoundException("User not found"));
 
         return User.builder()
                 .username(customer.getEmail())
