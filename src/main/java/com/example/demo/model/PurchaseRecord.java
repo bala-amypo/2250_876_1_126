@@ -1,17 +1,27 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDate;
 
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "purchase_records")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PurchaseRecord {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private CustomerProfile customer;
+
+    private String customerId;
+
     private Double amount;
-    private LocalDate purchaseDate;
-    private String storeLocation;
+
+    private String description;
+
+    private LocalDateTime purchaseDate;
 }
