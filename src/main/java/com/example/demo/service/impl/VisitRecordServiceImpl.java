@@ -1,40 +1,43 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.VisitRecord;
+import com.example.demo.repository.VisitRecordRepository;
 import com.example.demo.service.VisitRecordService;
+import org.springframework.stereotype.Service;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-import java.util.*;
-
+@Service
 public class VisitRecordServiceImpl implements VisitRecordService {
-
-    private final List<VisitRecord> visits = new ArrayList<>();
-
-    public VisitRecordServiceImpl() {}
-
+    
+    private final VisitRecordRepository visitRecordRepository;
+    private static final List<String> VALID_CHANNELS = Arrays.asList("STORE", "APP", "WEB");
+    
+    public VisitRecordServiceImpl(VisitRecordRepository visitRecordRepository) {
+        this.visitRecordRepository = visitRecordRepository;
+    }
+    
     @Override
     public VisitRecord recordVisit(VisitRecord visit) {
-
-        if (!List.of("STORE", "APP", "WEB").contains(visit.getChannel())) {
+        if (visit.getChannel() == null || !VALID_CHANNELS.contains(visit.getChannel())) {
             throw new IllegalArgumentException("Invalid channel");
         }
-
-        visit.setId((long) (visits.size() + 1));
-        visits.add(visit);
-        return visit;
+        return visitRecordRepository.save(visit);
     }
-
+    
     @Override
     public List<VisitRecord> getVisitsByCustomer(Long customerId) {
-        return visits;
+        return visitRecordRepository.findByCustomerId(customerId);
     }
-
+    
     @Override
     public List<VisitRecord> getAllVisits() {
-        return visits;
+        return visitRecordRepository.findAll();
     }
-
+    
     @Override
     public Optional<VisitRecord> getVisitById(Long id) {
-        return Optional.empty();
+        return visitRecordRepository.findById(id);
     }
 }
