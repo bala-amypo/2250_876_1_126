@@ -1,62 +1,34 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.VisitRecord;
 import com.example.demo.service.VisitRecordService;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/visits")
-@CrossOrigin(origins = "*")
-public class VisitController {
+@RequestMapping("/visits")
+public class VisitRecordController {
 
-    private final VisitRecordService visitRecordService;
+    private final VisitRecordService visitService;
 
-    public VisitController(VisitRecordService visitRecordService) {
-        this.visitRecordService = visitRecordService;
+    public VisitRecordController(VisitRecordService visitService) {
+        this.visitService = visitService;
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<VisitRecord>> recordVisit(@RequestBody VisitRecord visit) {
-        try {
-            VisitRecord created = visitRecordService.recordVisit(visit);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Visit recorded successfully", created));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+    public VisitRecord recordVisit(@RequestBody VisitRecord visit) {
+        return visitService.recordVisit(visit);
     }
 
-    @GetMapping("/customer/{customerId}")
-    public ResponseEntity<ApiResponse<List<VisitRecord>>> getVisitsByCustomer(@PathVariable Long customerId) {
-        try {
-            List<VisitRecord> visits = visitRecordService.getVisitsByCustomer(customerId);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Visits retrieved successfully", visits));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+    @GetMapping("/customer/{id}")
+    public List<VisitRecord> getVisitsByCustomer(@PathVariable Long id) {
+        return visitService.getVisitsByCustomer(id);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<VisitRecord>>> getAllVisits() {
-        try {
-            List<VisitRecord> visits = visitRecordService.getAllVisits();
-            return ResponseEntity.ok(new ApiResponse<>(true, "All visits retrieved successfully", visits));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<VisitRecord>> getVisitById(@PathVariable Long id) {
-        try {
-            return visitRecordService.getVisitById(id)
-                .map(visit -> ResponseEntity.ok(new ApiResponse<>(true, "Visit retrieved successfully", visit)))
-                .orElse(ResponseEntity.badRequest().body(new ApiResponse<>(false, "Visit not found", null)));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+    public List<VisitRecord> getAllVisits() {
+        return visitService.getAllVisits();
     }
 }

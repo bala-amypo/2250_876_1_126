@@ -1,61 +1,52 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.CustomerProfile;
 import com.example.demo.service.CustomerProfileService;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/customers")
-@CrossOrigin(origins = "*")
-public class CustomerController {
+@RequestMapping("/customers")
+public class CustomerProfileController {
 
-    private final CustomerProfileService customerProfileService;
+    private final CustomerProfileService customerService;
 
-    public CustomerController(CustomerProfileService customerProfileService) {
-        this.customerProfileService = customerProfileService;
+    public CustomerProfileController(CustomerProfileService customerService) {
+        this.customerService = customerService;
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CustomerProfile>> createCustomer(@RequestBody CustomerProfile customer) {
-        try {
-            CustomerProfile created = customerProfileService.createCustomer(customer);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Customer created successfully", created));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+    public CustomerProfile createCustomer(@RequestBody CustomerProfile customer) {
+        return customerService.createCustomer(customer);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<CustomerProfile>> getCustomer(@PathVariable Long id) {
-        try {
-            CustomerProfile customer = customerProfileService.getCustomerById(id);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Customer retrieved successfully", customer));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+    public CustomerProfile getCustomer(@PathVariable Long id) {
+        return customerService.getCustomerById(id);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CustomerProfile>>> getAllCustomers() {
-        try {
-            List<CustomerProfile> customers = customerProfileService.getAllCustomers();
-            return ResponseEntity.ok(new ApiResponse<>(true, "Customers retrieved successfully", customers));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+    public List<CustomerProfile> getAllCustomers() {
+        return customerService.getAllCustomers();
+    }
+
+    @GetMapping("/by-customer-id/{cid}")
+    public Optional<CustomerProfile> findByCustomerId(@PathVariable String cid) {
+        return customerService.findByCustomerId(cid);
     }
 
     @PutMapping("/{id}/tier")
-    public ResponseEntity<ApiResponse<CustomerProfile>> updateTier(@PathVariable Long id, @RequestParam String tier) {
-        try {
-            CustomerProfile updated = customerProfileService.updateTier(id, tier);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Tier updated successfully", updated));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, e.getMessage(), null));
-        }
+    public CustomerProfile updateTier(@PathVariable Long id,
+                                      @RequestParam String tier) {
+        return customerService.updateTier(id, tier);
+    }
+
+    @PutMapping("/{id}/status")
+    public CustomerProfile updateStatus(@PathVariable Long id,
+                                        @RequestParam boolean active) {
+        return customerService.updateStatus(id, active);
     }
 }

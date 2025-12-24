@@ -2,42 +2,33 @@ package com.example.demo.controller;
 
 import com.example.demo.model.TierHistoryRecord;
 import com.example.demo.service.TierUpgradeEngineService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tier-engine")
-@Tag(name = "Tier Upgrade Engine")
-public class TierUpgradeController {
+@RequestMapping("/engine")
+public class TierUpgradeEngineController {
 
-    private final TierUpgradeEngineService tierUpgradeEngineService;
+    private final TierUpgradeEngineService engineService;
 
-    public TierUpgradeController(TierUpgradeEngineService tierUpgradeEngineService) {
-        this.tierUpgradeEngineService = tierUpgradeEngineService;
+    public TierUpgradeEngineController(TierUpgradeEngineService engineService) {
+        this.engineService = engineService;
     }
 
     @PostMapping("/evaluate/{customerId}")
-    @Operation(summary = "Evaluate and upgrade customer tier")
-    public ResponseEntity<TierHistoryRecord> evaluateAndUpgrade(@PathVariable Long customerId) {
-        TierHistoryRecord result = tierUpgradeEngineService.evaluateAndUpgradeTier(customerId);
-        return ResponseEntity.ok(result);
+    public TierHistoryRecord evaluate(@PathVariable Long customerId) {
+        return engineService.evaluateAndUpgradeTier(customerId);
     }
 
     @GetMapping("/history/{customerId}")
-    @Operation(summary = "Get tier history for customer")
-    public ResponseEntity<List<TierHistoryRecord>> getHistory(@PathVariable Long customerId) {
-        List<TierHistoryRecord> history = tierUpgradeEngineService.getHistoryByCustomer(customerId);
-        return ResponseEntity.ok(history);
+    public List<TierHistoryRecord> getHistory(@PathVariable Long customerId) {
+        return engineService.getHistoryByCustomer(customerId);
     }
 
-    @GetMapping
-    @Operation(summary = "Get all tier history")
-    public ResponseEntity<List<TierHistoryRecord>> getAllHistory() {
-        List<TierHistoryRecord> history = tierUpgradeEngineService.getAllHistory();
-        return ResponseEntity.ok(history);
+    @GetMapping("/history")
+    public List<TierHistoryRecord> getAllHistory() {
+        return engineService.getAllHistory();
     }
 }
