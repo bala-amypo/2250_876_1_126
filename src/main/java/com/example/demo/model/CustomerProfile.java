@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "customer_profile")
+@Table(name = "customer_profiles")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,24 +18,19 @@ public class CustomerProfile {
     @Column(unique = true, nullable = false)
     private String customerId;
 
-    @Column(nullable = false)
     private String fullName;
 
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String phone;
 
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private String role;
 
-    @Column(nullable = false)
-    private String tier;
+    private String currentTier;
 
-    @Column(nullable = false)
-    private boolean active = true;
+    private boolean active;
 }
