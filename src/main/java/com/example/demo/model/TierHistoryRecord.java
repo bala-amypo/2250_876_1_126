@@ -1,16 +1,10 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tier_history_records")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class TierHistoryRecord {
     
     @Id
@@ -38,4 +32,33 @@ public class TierHistoryRecord {
             changedAt = LocalDateTime.now();
         }
     }
+    
+    public TierHistoryRecord() {}
+    
+    public TierHistoryRecord(Long customerId, String oldTier, String newTier, String reason, LocalDateTime changedAt) {
+        this.customerId = customerId;
+        this.oldTier = oldTier;
+        this.newTier = newTier;
+        this.reason = reason;
+        this.changedAt = changedAt;
+    }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public Long getCustomerId() { return customerId; }
+    public void setCustomerId(Long customerId) { this.customerId = customerId; }
+    
+    public String getOldTier() { return oldTier; }
+    public void setOldTier(String oldTier) { this.oldTier = oldTier; }
+    
+    public String getNewTier() { return newTier; }
+    public void setNewTier(String newTier) { this.newTier = newTier; }
+    
+    public String getReason() { return reason; }
+    public void setReason(String reason) { this.reason = reason; }
+    
+    public LocalDateTime getChangedAt() { return changedAt; }
+    public void setChangedAt(LocalDateTime changedAt) { this.changedAt = changedAt; }
 }
