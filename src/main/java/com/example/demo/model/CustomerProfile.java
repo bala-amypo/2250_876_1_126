@@ -1,20 +1,26 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "customer_profile")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerProfile {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String customerId;
-    private String fullName;
+
+    @Column(unique = true, nullable = false)
     private String email;
-    private String phone;
-    private String currentTier;
-    private boolean active;
-    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String role;
 }
