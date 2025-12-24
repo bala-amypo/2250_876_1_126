@@ -1,17 +1,15 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.VisitRecord;
-
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
-public interface VisitRecordRepository {
-
-    VisitRecord save(VisitRecord visit);
-
-    Optional<VisitRecord> findById(Long id);
-
+@Repository
+public interface VisitRecordRepository extends JpaRepository<VisitRecord, Long> {
+    @Query("SELECT v FROM VisitRecord v WHERE v.customer.id = :customerId")
     List<VisitRecord> findByCustomerId(Long customerId);
-
-    List<VisitRecord> findAll();
+    List<VisitRecord> findByVisitDateBetween(LocalDate start, LocalDate end);
 }
