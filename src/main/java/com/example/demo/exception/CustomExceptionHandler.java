@@ -8,30 +8,52 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.NoSuchElementException;
 
+/**
+ * CustomExceptionHandler
+ * Handles application-specific exception responses
+ * using standard Java exceptions as per helper document.
+ */
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class CustomExceptionHandler {
 
+    /**
+     * Handles entity not found cases
+     * Example: Customer not found, Rule not found
+     */
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ApiResponse> handleNotFound(NoSuchElementException ex) {
-        return new ResponseEntity<>(
-                new ApiResponse(false, ex.getMessage()),
-                HttpStatus.NOT_FOUND
+    public ResponseEntity<ApiResponse> handleNoSuchElement(NoSuchElementException ex) {
+        ApiResponse response = new ApiResponse(
+                false,
+                ex.getMessage()
         );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Handles validation and bad input cases
+     * Example:
+     *  - Amount must be positive
+     *  - Invalid channel
+     *  - Customer ID already exists
+     */
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse> handleBadRequest(IllegalArgumentException ex) {
-        return new ResponseEntity<>(
-                new ApiResponse(false, ex.getMessage()),
-                HttpStatus.BAD_REQUEST
+    public ResponseEntity<ApiResponse> handleIllegalArgument(IllegalArgumentException ex) {
+        ApiResponse response = new ApiResponse(
+                false,
+                ex.getMessage()
         );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleGeneric(Exception ex) {
-        return new ResponseEntity<>(
-                new ApiResponse(false, "Internal server error"),
-                HttpStatus.INTERNAL_SERVER_ERROR
+    /**
+     * Fallback handler for unexpected errors
+     */
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiResponse> handleRuntime(RuntimeException ex) {
+        ApiResponse response = new ApiResponse(
+                false,
+                "Unexpected server error"
         );
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

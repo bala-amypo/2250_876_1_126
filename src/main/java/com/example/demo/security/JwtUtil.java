@@ -1,27 +1,50 @@
 package com.example.demo.security;
 
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
+
+import java.security.Key;
+import java.util.Date;
 
 @Component
 public class JwtUtil {
-    
+
+    private final Key key;
+    private final long expirationMillis = 24 * 60 * 60 * 1000; // 1 day
+
+    public JwtUtil() {
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    }
+
     public String generateToken(Long customerId, String email, String role) {
-        return "dummy-jwt-token-" + customerId;
+        return Jwts.builder()
+                .setSubject(email)
+                .claim("customerId", customerId)
+                .claim("role", role)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
+                .signWith(key)
+                .compact();
     }
-    
-    public boolean validateToken(String token) {
-        return token != null && token.startsWith("dummy-jwt-token");
+
+    public Claims validateToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
-    
+
     public String extractEmail(String token) {
-        return "test@example.com";
+        return validateToken(token).getSubject();
     }
-    
+
     public Long extractCustomerId(String token) {
-        return 1L;
+        return validateToken(token).get("customerId", Long.class);
     }
-    
+
     public String extractRole(String token) {
-        return "USER";
+        return validateToken(token).get("role", String.class);
     }
 }
