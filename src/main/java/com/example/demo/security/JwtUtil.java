@@ -2,6 +2,7 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -11,10 +12,14 @@ import java.util.Date;
 public class JwtUtil {
 
     private final Key key;
-    private final long expirationMillis = 24 * 60 * 60 * 1000; // 1 day
+    private final long expirationMillis;
 
-    public JwtUtil() {
-        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    public JwtUtil(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiration}") long expirationMillis
+    ) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expirationMillis = expirationMillis;
     }
 
     public String generateToken(Long customerId, String email, String role) {
@@ -24,7 +29,7 @@ public class JwtUtil {
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
-                .signWith(key)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
