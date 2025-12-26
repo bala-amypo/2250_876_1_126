@@ -1,6 +1,6 @@
 package com.example.demo.exception;
 
-import com.example.demo.dto.ApiResponse;
+import com.example.demo.dto.AuthResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,20 +11,20 @@ import java.util.NoSuchElementException;
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ApiResponse> handleNoSuchElement(NoSuchElementException ex) {
+    public ResponseEntity<AuthResponse> handleNoSuchElement(NoSuchElementException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiResponse(false, ex.getMessage(), null));
+                .body(new AuthResponse(false, ex.getMessage(), null));
     }
     
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse> handleIllegalArgument(IllegalArgumentException ex) {
+    public ResponseEntity<AuthResponse> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ApiResponse(false, ex.getMessage(), null));
+                .body(new AuthResponse(false, ex.getMessage(), null));
     }
     
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleGenericException(Exception ex) {
+    public ResponseEntity<AuthResponse> handleGenericException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiResponse(false, "An error occurred: " + ex.getMessage(), null));
+                .body(new AuthResponse(false, "An error occurred: " + ex.getMessage(), null));
     }
 }

@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
+import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.CustomerProfile;
@@ -34,7 +34,7 @@ public class AuthController {
     
     @PostMapping("/register")
     @Operation(summary = "Register new customer")
-    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
         try {
             CustomerProfile customer = new CustomerProfile();
             customer.setCustomerId(request.getEmail());
@@ -47,15 +47,15 @@ public class AuthController {
             customer.setActive(true);
             
             CustomerProfile created = customerProfileService.createCustomer(customer);
-            return ResponseEntity.ok(new ApiResponse(true, "Registration successful", created));
+            return ResponseEntity.ok(new AuthResponse(true, "Registration successful", created));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse(false, e.getMessage(), null));
+            return ResponseEntity.badRequest().body(new AuthResponse(false, e.getMessage(), null));
         }
     }
     
     @PostMapping("/login")
     @Operation(summary = "Login")
-    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         try {
             Optional<CustomerProfile> customerOpt = customerProfileService.findByCustomerId(request.getEmail());
             if (customerOpt.isEmpty()) {
@@ -65,7 +65,7 @@ public class AuthController {
             }
             
             if (customerOpt.isEmpty()) {
-                return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid credentials", null));
+                return ResponseEntity.badRequest().body(new AuthResponse(false, "Invalid credentials", null));
             }
             
             CustomerProfile customer = customerOpt.get();
