@@ -71,7 +71,7 @@ public class AuthController {
             CustomerProfile customer = customerOpt.get();
             
             if (!passwordEncoder.matches(request.getPassword(), customer.getPassword())) {
-                return ResponseEntity.badRequest().body(new ApiResponse(false, "Invalid credentials", null));
+                return ResponseEntity.badRequest().body(new AuthResponse(false, "Invalid credentials", null));
             }
             
             String token = jwtUtil.generateToken(customer.getId(), customer.getEmail(), customer.getRole());
@@ -80,9 +80,9 @@ public class AuthController {
             data.put("token", token);
             data.put("customer", customer);
             
-            return ResponseEntity.ok(new ApiResponse(true, "Login successful", data));
+            return ResponseEntity.ok(new AuthResponse(true, "Login successful", data));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse(false, e.getMessage(), null));
+            return ResponseEntity.badRequest().body(new AuthResponse(false, e.getMessage(), null));
         }
     }
 }
